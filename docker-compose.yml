@@ -1,0 +1,20 @@
+# Local full stack: http://localhost:8080
+#   cp .env.example .env   # optionally set LLM_PROVIDER + API key
+#   docker compose up --build
+services:
+  backend:
+    build: ./backend
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      ALLOWED_ORIGINS: http://localhost:8080
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

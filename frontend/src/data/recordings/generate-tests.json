@@ -1,0 +1,1256 @@
+{
+ "scenario": {
+  "id": "generate-tests",
+  "title": "Generate Unit Tests",
+  "short_title": "Generate Tests",
+  "description": "The orchestrator skips the Developer: no code change is needed. The Reviewer sends the Tester back once to cover the edge cases the Analyzer found.",
+  "task_type": "TEST_GEN",
+  "highlights": [
+   "3 of 4 agents",
+   "Agent skipped",
+   "Reviewer feedback loop"
+  ],
+  "code": "import re\n\n\ndef slugify(text: str, max_length: int = 50) -> str:\n    \"\"\"Convert text to a URL-friendly slug.\"\"\"\n    if max_length <= 0:\n        raise ValueError(\"max_length must be positive\")\n    slug = text.lower().strip()\n    slug = re.sub(r\"[^a-z0-9\\s-]\", \"\", slug)\n    slug = re.sub(r\"[\\s_-]+\", \"-\", slug)\n    slug = slug.strip(\"-\")\n    return slug[:max_length].rstrip(\"-\")\n",
+  "request": "Generate a pytest suite for slugify covering nominal behaviour, edge cases and errors."
+ },
+ "recording": {
+  "recorded_at": "2026-11-14T13:04:50+00:00",
+  "engine": "LangGraph (backend/app/orchestration/graph.py)",
+  "provider": "mock",
+  "model": "scripted-demo-model",
+  "simulated": true,
+  "status": "completed",
+  "duration_s": 15.846
+ },
+ "events": [
+  {
+   "seq": 1,
+   "workflow_id": "demo_generate-tests",
+   "type": "workflow_started",
+   "agent": "orchestrator",
+   "t": 0.0,
+   "timestamp": "2026-11-14T13:04:34.857Z",
+   "data": {
+    "mode": "demo-recording",
+    "provider": "mock",
+    "model": "scripted-demo-model",
+    "simulated": true,
+    "scenario_id": "generate-tests",
+    "request": "Generate a pytest suite for slugify covering nominal behaviour, edge cases and errors.",
+    "task_hint": "TEST_GEN",
+    "limits": {
+     "max_iterations": 3,
+     "timeout_s": 180.0,
+     "quality_threshold": 8.0,
+     "min_rubric_score": 8.0,
+     "max_llm_calls": 14,
+     "max_cost_usd": 0.5
+    }
+   }
+  },
+  {
+   "seq": 2,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_started",
+   "agent": "orchestrator",
+   "t": 0.003,
+   "timestamp": "2026-11-14T13:04:34.859Z",
+   "data": {
+    "phase": "planning"
+   }
+  },
+  {
+   "seq": 3,
+   "workflow_id": "demo_generate-tests",
+   "type": "tool_result",
+   "agent": "tools",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:34.860Z",
+   "data": {
+    "tool": "static_analysis",
+    "report": {
+     "syntax_ok": true,
+     "syntax_error": null,
+     "findings": [],
+     "functions": [
+      {
+       "name": "slugify",
+       "line": 4,
+       "args": [
+        "text",
+        "max_length"
+       ],
+       "has_docstring": true,
+       "has_type_hints": true
+      }
+     ]
+    },
+    "summary": "0 finding(s) from parser-based checks (ast + pyflakes, code not executed)"
+   }
+  },
+  {
+   "seq": 4,
+   "workflow_id": "demo_generate-tests",
+   "type": "task_classified",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:34.860Z",
+   "data": {
+    "task_type": "TEST_GEN",
+    "confidence": 1.0,
+    "reason": "Mission type given by the selected scenario (no classification call needed)."
+   }
+  },
+  {
+   "seq": 5,
+   "workflow_id": "demo_generate-tests",
+   "type": "plan_created",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:34.860Z",
+   "data": {
+    "task_type": "TEST_GEN",
+    "stages": [
+     [
+      "analyzer"
+     ],
+     [
+      "tester"
+     ],
+     [
+      "reviewer"
+     ]
+    ],
+    "selected_agents": [
+     "analyzer",
+     "tester",
+     "reviewer"
+    ],
+    "skipped_agents": [
+     "developer"
+    ],
+    "subtasks": {
+     "analyzer": "Describe the behaviour of the code and its edge cases.",
+     "developer": "",
+     "tester": "Write a pytest module covering nominal, edge and error cases.",
+     "reviewer": "Check that the tests cover the behaviours identified by the Analyzer."
+    },
+    "rationale": "No code change is requested, so the Developer is skipped; tests are written and reviewed."
+   }
+  },
+  {
+   "seq": 6,
+   "workflow_id": "demo_generate-tests",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:34.860Z",
+   "data": {
+    "decision": "Select Analyzer, Tester, Reviewer",
+    "reason": "No code change is requested, so the Developer is skipped; tests are written and reviewed. Skipped: Developer.",
+    "kind": "plan",
+    "next": [
+     "analyzer",
+     "tester",
+     "reviewer"
+    ]
+   }
+  },
+  {
+   "seq": 7,
+   "workflow_id": "demo_generate-tests",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:34.860Z",
+   "data": {
+    "decision": "Start with Analyzer",
+    "reason": "The first stage of the plan needs no prior input.",
+    "kind": "dispatch",
+    "next": [
+     "analyzer"
+    ]
+   }
+  },
+  {
+   "seq": 8,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:34.861Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "analyzer",
+    "message_type": "instruction",
+    "content": "Describe the behaviour of the code and its edge cases.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 9,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "tools",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:34.861Z",
+   "data": {
+    "sender": "tools",
+    "receiver": "analyzer",
+    "message_type": "static_facts",
+    "content": "No finding from the parser-based checks.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 10,
+   "workflow_id": "demo_generate-tests",
+   "type": "transition",
+   "agent": null,
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:34.861Z",
+   "data": {
+    "source": "orchestrator",
+    "target": "analyzer",
+    "kind": "dispatch",
+    "label": ""
+   }
+  },
+  {
+   "seq": 11,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_completed",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:34.861Z",
+   "data": {
+    "phase": "planning",
+    "outcome": "success"
+   }
+  },
+  {
+   "seq": 12,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_started",
+   "agent": "analyzer",
+   "t": 0.006,
+   "timestamp": "2026-11-14T13:04:34.862Z",
+   "data": {
+    "iteration": 0,
+    "inputs": {
+     "instruction": "Describe the behaviour of the code and its edge cases.",
+     "request": "Generate a pytest suite for slugify covering nominal behaviour, edge cases and errors.",
+     "code_lines": 13,
+     "static_findings": 0
+    },
+    "dispatch_id": 1
+   }
+  },
+  {
+   "seq": 13,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_completed",
+   "agent": "analyzer",
+   "t": 2.609,
+   "timestamp": "2026-11-14T13:04:37.465Z",
+   "data": {
+    "outcome": "success",
+    "duration_ms": 2603,
+    "iteration": 0,
+    "summary": "Five behaviours to pin down; underscores and accents are silently deleted. 4 issue(s) found. Most severe: Underscores deleted instead of converted (medium).",
+    "output": {
+     "summary": "Five behaviours to pin down; underscores and accents are silently deleted.",
+     "issues": [
+      {
+       "title": "Underscores deleted instead of converted",
+       "severity": "medium",
+       "line": 9,
+       "detail": "[^a-z0-9\\s-] removes '_' before the separator regex runs, so '_' in [\\s_-] is dead code."
+      },
+      {
+       "title": "Non-ASCII letters are dropped",
+       "severity": "medium",
+       "line": 9,
+       "detail": "'Café' becomes 'caf' because é is outside [a-z]."
+      },
+      {
+       "title": "Truncation can end on a hyphen",
+       "severity": "low",
+       "line": 12,
+       "detail": "Handled by rstrip('-') after slicing; worth a regression test."
+      },
+      {
+       "title": "max_length validation",
+       "severity": "low",
+       "line": 6,
+       "detail": "Zero and negative values raise ValueError."
+      }
+     ],
+     "recommendations": [
+      "Test underscores, accents, truncation on a hyphen and symbol-only input explicitly.",
+      "Parametrise the invalid max_length cases."
+     ]
+    }
+   }
+  },
+  {
+   "seq": 14,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 2.609,
+   "timestamp": "2026-11-14T13:04:37.465Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "orchestrator",
+    "message_type": "analysis",
+    "content": "Five behaviours to pin down; underscores and accents are silently deleted. 4 issue(s) found. Most severe: Underscores deleted instead of converted (medium).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 15,
+   "workflow_id": "demo_generate-tests",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 2.61,
+   "timestamp": "2026-11-14T13:04:37.466Z",
+   "data": {
+    "decision": "Hand off to Tester",
+    "reason": "Analyzer completed successfully.",
+    "kind": "dispatch",
+    "next": [
+     "tester"
+    ],
+    "iteration": 0
+   }
+  },
+  {
+   "seq": 16,
+   "workflow_id": "demo_generate-tests",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 2.61,
+   "timestamp": "2026-11-14T13:04:37.466Z",
+   "data": {
+    "calls": 1,
+    "input_tokens": 410,
+    "output_tokens": 400,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 17,
+   "workflow_id": "demo_generate-tests",
+   "type": "transition",
+   "agent": null,
+   "t": 2.61,
+   "timestamp": "2026-11-14T13:04:37.466Z",
+   "data": {
+    "source": "analyzer",
+    "target": "tester",
+    "kind": "handoff",
+    "label": ""
+   }
+  },
+  {
+   "seq": 18,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 2.61,
+   "timestamp": "2026-11-14T13:04:37.466Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "tester",
+    "message_type": "instruction",
+    "content": "Write a pytest module covering nominal, edge and error cases.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 19,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 2.61,
+   "timestamp": "2026-11-14T13:04:37.466Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "tester",
+    "message_type": "analysis",
+    "content": "Five behaviours to pin down; underscores and accents are silently deleted. 4 issue(s) found. Most severe: Underscores deleted instead of converted (medium).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 20,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_started",
+   "agent": "tester",
+   "t": 2.612,
+   "timestamp": "2026-11-14T13:04:37.469Z",
+   "data": {
+    "iteration": 0,
+    "inputs": {
+     "focus": "Write tests that pin down the current behaviour of the original code. A trace `passes` when your expected value matches what the code really does.",
+     "code_under_test": "original code",
+     "analysis": "Five behaviours to pin down; underscores and accents are silently deleted."
+    },
+    "dispatch_id": 2
+   }
+  },
+  {
+   "seq": 21,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_completed",
+   "agent": "tester",
+   "t": 6.819,
+   "timestamp": "2026-11-14T13:04:41.676Z",
+   "data": {
+    "outcome": "success",
+    "duration_ms": 4207,
+    "iteration": 0,
+    "summary": "5 tests covering the main path and the max_length error. [5 tests generated, not executed — traced: all cases expected to pass]",
+    "output": {
+     "summary": "5 tests covering the main path and the max_length error.",
+     "test_code": "import pytest\n\nfrom solution import slugify\n\n\ndef test_basic_sentence():\n    assert slugify(\"Hello World\") == \"hello-world\"\n\n\ndef test_punctuation_removed():\n    assert slugify(\"Hello, World!\") == \"hello-world\"\n\n\ndef test_collapses_whitespace():\n    assert slugify(\"  many   spaces  here \") == \"many-spaces-here\"\n\n\ndef test_empty_string():\n    assert slugify(\"\") == \"\"\n\n\ndef test_invalid_max_length():\n    with pytest.raises(ValueError):\n        slugify(\"abc\", max_length=0)\n",
+     "cases": [
+      {
+       "name": "test_basic_sentence",
+       "category": "nominal",
+       "description": "Spaces become hyphens"
+      },
+      {
+       "name": "test_punctuation_removed",
+       "category": "nominal",
+       "description": "Punctuation stripped"
+      },
+      {
+       "name": "test_collapses_whitespace",
+       "category": "edge",
+       "description": "Runs of spaces collapse"
+      },
+      {
+       "name": "test_empty_string",
+       "category": "edge",
+       "description": "Empty input"
+      },
+      {
+       "name": "test_invalid_max_length",
+       "category": "error",
+       "description": "max_length=0 raises"
+      }
+     ],
+     "traces": [
+      {
+       "case": "test_basic_sentence",
+       "trace": "Traced: spaces become hyphens.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_punctuation_removed",
+       "trace": "Traced: punctuation stripped.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_collapses_whitespace",
+       "trace": "Traced: runs of spaces collapse.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_empty_string",
+       "trace": "Traced: empty input.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_invalid_max_length",
+       "trace": "Traced: max_length=0 raises.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      }
+     ],
+     "validation": {
+      "passed": true,
+      "failing_cases": [],
+      "issues": []
+     }
+    },
+    "test_results": {
+     "executed": false,
+     "method": "per-case code tracing by the Tester agent; verdict computed from the traces (tests not executed)",
+     "passed": true,
+     "failing_cases": [],
+     "issues": [],
+     "total_cases": 5
+    }
+   }
+  },
+  {
+   "seq": 22,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "tester",
+   "t": 6.819,
+   "timestamp": "2026-11-14T13:04:41.676Z",
+   "data": {
+    "sender": "tester",
+    "receiver": "orchestrator",
+    "message_type": "test_report",
+    "content": "5 tests covering the main path and the max_length error. [5 tests generated, not executed — traced: all cases expected to pass]",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 23,
+   "workflow_id": "demo_generate-tests",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 6.821,
+   "timestamp": "2026-11-14T13:04:41.677Z",
+   "data": {
+    "decision": "Hand off to Reviewer",
+    "reason": "Tester completed successfully.",
+    "kind": "dispatch",
+    "next": [
+     "reviewer"
+    ],
+    "iteration": 0
+   }
+  },
+  {
+   "seq": 24,
+   "workflow_id": "demo_generate-tests",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 6.821,
+   "timestamp": "2026-11-14T13:04:41.677Z",
+   "data": {
+    "calls": 3,
+    "input_tokens": 1660,
+    "output_tokens": 1200,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 25,
+   "workflow_id": "demo_generate-tests",
+   "type": "transition",
+   "agent": null,
+   "t": 6.821,
+   "timestamp": "2026-11-14T13:04:41.677Z",
+   "data": {
+    "source": "tester",
+    "target": "reviewer",
+    "kind": "handoff",
+    "label": ""
+   }
+  },
+  {
+   "seq": 26,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 6.821,
+   "timestamp": "2026-11-14T13:04:41.677Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "reviewer",
+    "message_type": "instruction",
+    "content": "Check that the tests cover the behaviours identified by the Analyzer.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 27,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 6.821,
+   "timestamp": "2026-11-14T13:04:41.678Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "reviewer",
+    "message_type": "analysis",
+    "content": "Five behaviours to pin down; underscores and accents are silently deleted. 4 issue(s) found. Most severe: Underscores deleted instead of converted (medium).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 28,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "tester",
+   "t": 6.821,
+   "timestamp": "2026-11-14T13:04:41.678Z",
+   "data": {
+    "sender": "tester",
+    "receiver": "reviewer",
+    "message_type": "test_report",
+    "content": "5 tests covering the main path and the max_length error. [5 tests generated, not executed — traced: all cases expected to pass]",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 29,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_started",
+   "agent": "reviewer",
+   "t": 6.823,
+   "timestamp": "2026-11-14T13:04:41.680Z",
+   "data": {
+    "iteration": 0,
+    "inputs": {
+     "deliverable": "the generated test suite",
+     "test_report": "5 tests covering the main path and the max_length error."
+    },
+    "dispatch_id": 3
+   }
+  },
+  {
+   "seq": 30,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_completed",
+   "agent": "reviewer",
+   "t": 9.226,
+   "timestamp": "2026-11-14T13:04:44.083Z",
+   "data": {
+    "outcome": "below_threshold",
+    "duration_ms": 2403,
+    "iteration": 0,
+    "summary": "APPROVED — quality 7.2/10 (correctness 9, edge cases 5, robustness 7, readability 8). The tests are correct, but the edge cases found by the Analyzer are not covered.",
+    "output": {
+     "summary": "The tests are correct, but the edge cases found by the Analyzer are not covered.",
+     "approved": true,
+     "rubric": {
+      "correctness": 9,
+      "edge_cases": 5,
+      "robustness": 7,
+      "readability": 8
+     },
+     "findings": [
+      "Main path is covered",
+      "None of the four Analyzer edge cases is tested"
+     ],
+     "required_changes": [
+      "Add tests for underscores, accents and truncation ending on a hyphen.",
+      "Add a symbol-only input case and parametrise invalid max_length values."
+     ],
+     "risks": [
+      "Silent data loss (underscores, accents) could regress unnoticed."
+     ],
+     "score": 7.2
+    }
+   }
+  },
+  {
+   "seq": 31,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "reviewer",
+   "t": 9.226,
+   "timestamp": "2026-11-14T13:04:44.083Z",
+   "data": {
+    "sender": "reviewer",
+    "receiver": "orchestrator",
+    "message_type": "review",
+    "content": "APPROVED — quality 7.2/10 (correctness 9, edge cases 5, robustness 7, readability 8). The tests are correct, but the edge cases found by the Analyzer are not covered.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 32,
+   "workflow_id": "demo_generate-tests",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 9.227,
+   "timestamp": "2026-11-14T13:04:44.084Z",
+   "data": {
+    "decision": "Rework requested from Tester",
+    "reason": "Quality 7.2/10 is below the bar of 8.0 — weakest: edge cases 5, robustness 7. To do: Add tests for underscores, accents and truncation ending on a hyphen.; Add a symbol-only input case and parametrise invalid max_length values.. Routing back to the Tester (correction 1/3).",
+    "kind": "rework",
+    "next": [
+     "tester"
+    ],
+    "iteration": 1
+   }
+  },
+  {
+   "seq": 33,
+   "workflow_id": "demo_generate-tests",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 9.227,
+   "timestamp": "2026-11-14T13:04:44.084Z",
+   "data": {
+    "calls": 4,
+    "input_tokens": 2415,
+    "output_tokens": 1600,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 34,
+   "workflow_id": "demo_generate-tests",
+   "type": "iteration",
+   "agent": "orchestrator",
+   "t": 9.227,
+   "timestamp": "2026-11-14T13:04:44.084Z",
+   "data": {
+    "iteration": 1,
+    "max_iterations": 3,
+    "target": "tester"
+   }
+  },
+  {
+   "seq": 35,
+   "workflow_id": "demo_generate-tests",
+   "type": "transition",
+   "agent": null,
+   "t": 9.227,
+   "timestamp": "2026-11-14T13:04:44.084Z",
+   "data": {
+    "source": "reviewer",
+    "target": "tester",
+    "kind": "retry",
+    "label": "changes requested"
+   }
+  },
+  {
+   "seq": 36,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 9.227,
+   "timestamp": "2026-11-14T13:04:44.084Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "tester",
+    "message_type": "instruction",
+    "content": "Write a pytest module covering nominal, edge and error cases.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 37,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 9.227,
+   "timestamp": "2026-11-14T13:04:44.084Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "tester",
+    "message_type": "analysis",
+    "content": "Five behaviours to pin down; underscores and accents are silently deleted. 4 issue(s) found. Most severe: Underscores deleted instead of converted (medium).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 38,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_started",
+   "agent": "tester",
+   "t": 9.23,
+   "timestamp": "2026-11-14T13:04:44.086Z",
+   "data": {
+    "iteration": 1,
+    "inputs": {
+     "focus": "Write tests that pin down the current behaviour of the original code. A trace `passes` when your expected value matches what the code really does.",
+     "code_under_test": "original code",
+     "analysis": "Five behaviours to pin down; underscores and accents are silently deleted."
+    },
+    "dispatch_id": 4
+   }
+  },
+  {
+   "seq": 39,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_completed",
+   "agent": "tester",
+   "t": 13.437,
+   "timestamp": "2026-11-14T13:04:48.293Z",
+   "data": {
+    "outcome": "success",
+    "duration_ms": 4207,
+    "iteration": 1,
+    "summary": "11 tests: added the Analyzer's edge cases and parametrised errors. [11 tests generated, not executed — traced: all cases expected to pass]",
+    "output": {
+     "summary": "11 tests: added the Analyzer's edge cases and parametrised errors.",
+     "test_code": "import pytest\n\nfrom solution import slugify\n\n\ndef test_basic_sentence():\n    assert slugify(\"Hello World\") == \"hello-world\"\n\n\ndef test_punctuation_removed():\n    assert slugify(\"Hello, World!\") == \"hello-world\"\n\n\ndef test_collapses_whitespace():\n    assert slugify(\"  many   spaces  here \") == \"many-spaces-here\"\n\n\ndef test_empty_string():\n    assert slugify(\"\") == \"\"\n\n\ndef test_invalid_max_length():\n    with pytest.raises(ValueError):\n        slugify(\"abc\", max_length=0)\n\n\ndef test_symbols_only():\n    assert slugify(\"!!!???\") == \"\"\n\n\ndef test_underscores_are_dropped_not_converted():\n    # The first regex deletes \"_\" before the separator regex can see it.\n    assert slugify(\"snake_case_text\") == \"snakecasetext\"\n\n\ndef test_accents_are_dropped():\n    assert slugify(\"Café au lait\") == \"caf-au-lait\"\n\n\ndef test_truncation_strips_trailing_hyphen():\n    assert slugify(\"hello world\", max_length=6) == \"hello\"\n\n\ndef test_repeated_hyphens_collapse():\n    assert slugify(\"a -- b\") == \"a-b\"\n\n\n@pytest.mark.parametrize(\"bad\", [0, -1])\ndef test_non_positive_max_length(bad):\n    with pytest.raises(ValueError):\n        slugify(\"abc\", max_length=bad)\n",
+     "cases": [
+      {
+       "name": "test_basic_sentence",
+       "category": "nominal",
+       "description": "Spaces become hyphens"
+      },
+      {
+       "name": "test_punctuation_removed",
+       "category": "nominal",
+       "description": "Punctuation stripped"
+      },
+      {
+       "name": "test_collapses_whitespace",
+       "category": "edge",
+       "description": "Runs of spaces collapse"
+      },
+      {
+       "name": "test_empty_string",
+       "category": "edge",
+       "description": "Empty input"
+      },
+      {
+       "name": "test_invalid_max_length",
+       "category": "error",
+       "description": "max_length=0 raises"
+      },
+      {
+       "name": "test_symbols_only",
+       "category": "edge",
+       "description": "Only symbols gives ''"
+      },
+      {
+       "name": "test_underscores_are_dropped_not_converted",
+       "category": "edge",
+       "description": "Pins the underscore behaviour"
+      },
+      {
+       "name": "test_accents_are_dropped",
+       "category": "edge",
+       "description": "Pins the accent behaviour"
+      },
+      {
+       "name": "test_truncation_strips_trailing_hyphen",
+       "category": "edge",
+       "description": "No trailing hyphen after truncation"
+      },
+      {
+       "name": "test_repeated_hyphens_collapse",
+       "category": "edge",
+       "description": "Hyphen runs collapse"
+      },
+      {
+       "name": "test_non_positive_max_length",
+       "category": "error",
+       "description": "0 and -1 raise"
+      }
+     ],
+     "traces": [
+      {
+       "case": "test_basic_sentence",
+       "trace": "Traced: spaces become hyphens.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_punctuation_removed",
+       "trace": "Traced: punctuation stripped.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_collapses_whitespace",
+       "trace": "Traced: runs of spaces collapse.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_empty_string",
+       "trace": "Traced: empty input.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_invalid_max_length",
+       "trace": "Traced: max_length=0 raises.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_symbols_only",
+       "trace": "Traced: only symbols gives ''.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_underscores_are_dropped_not_converted",
+       "trace": "Traced: pins the underscore behaviour.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_accents_are_dropped",
+       "trace": "Traced: pins the accent behaviour.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_truncation_strips_trailing_hyphen",
+       "trace": "Traced: no trailing hyphen after truncation.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_repeated_hyphens_collapse",
+       "trace": "Traced: hyphen runs collapse.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_non_positive_max_length",
+       "trace": "Traced: 0 and -1 raise.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      }
+     ],
+     "validation": {
+      "passed": true,
+      "failing_cases": [],
+      "issues": []
+     }
+    },
+    "test_results": {
+     "executed": false,
+     "method": "per-case code tracing by the Tester agent; verdict computed from the traces (tests not executed)",
+     "passed": true,
+     "failing_cases": [],
+     "issues": [],
+     "total_cases": 11
+    }
+   }
+  },
+  {
+   "seq": 40,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "tester",
+   "t": 13.437,
+   "timestamp": "2026-11-14T13:04:48.294Z",
+   "data": {
+    "sender": "tester",
+    "receiver": "orchestrator",
+    "message_type": "test_report",
+    "content": "11 tests: added the Analyzer's edge cases and parametrised errors. [11 tests generated, not executed — traced: all cases expected to pass]",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 41,
+   "workflow_id": "demo_generate-tests",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 13.438,
+   "timestamp": "2026-11-14T13:04:48.295Z",
+   "data": {
+    "decision": "Hand off to Reviewer",
+    "reason": "Tester completed successfully.",
+    "kind": "dispatch",
+    "next": [
+     "reviewer"
+    ],
+    "iteration": 1
+   }
+  },
+  {
+   "seq": 42,
+   "workflow_id": "demo_generate-tests",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 13.438,
+   "timestamp": "2026-11-14T13:04:48.295Z",
+   "data": {
+    "calls": 6,
+    "input_tokens": 3932,
+    "output_tokens": 2400,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 43,
+   "workflow_id": "demo_generate-tests",
+   "type": "transition",
+   "agent": null,
+   "t": 13.438,
+   "timestamp": "2026-11-14T13:04:48.295Z",
+   "data": {
+    "source": "tester",
+    "target": "reviewer",
+    "kind": "handoff",
+    "label": ""
+   }
+  },
+  {
+   "seq": 44,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 13.438,
+   "timestamp": "2026-11-14T13:04:48.295Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "reviewer",
+    "message_type": "instruction",
+    "content": "Check that the tests cover the behaviours identified by the Analyzer.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 45,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 13.438,
+   "timestamp": "2026-11-14T13:04:48.295Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "reviewer",
+    "message_type": "analysis",
+    "content": "Five behaviours to pin down; underscores and accents are silently deleted. 4 issue(s) found. Most severe: Underscores deleted instead of converted (medium).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 46,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "tester",
+   "t": 13.438,
+   "timestamp": "2026-11-14T13:04:48.295Z",
+   "data": {
+    "sender": "tester",
+    "receiver": "reviewer",
+    "message_type": "test_report",
+    "content": "11 tests: added the Analyzer's edge cases and parametrised errors. [11 tests generated, not executed — traced: all cases expected to pass]",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 47,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_started",
+   "agent": "reviewer",
+   "t": 13.439,
+   "timestamp": "2026-11-14T13:04:48.296Z",
+   "data": {
+    "iteration": 1,
+    "inputs": {
+     "deliverable": "the generated test suite",
+     "previous_score": 7.2,
+     "test_report": "11 tests: added the Analyzer's edge cases and parametrised errors."
+    },
+    "dispatch_id": 5
+   }
+  },
+  {
+   "seq": 48,
+   "workflow_id": "demo_generate-tests",
+   "type": "agent_completed",
+   "agent": "reviewer",
+   "t": 15.843,
+   "timestamp": "2026-11-14T13:04:50.699Z",
+   "data": {
+    "outcome": "approved",
+    "duration_ms": 2403,
+    "iteration": 1,
+    "summary": "APPROVED — quality 8.8/10 (correctness 9, edge cases 9, robustness 8, readability 9). The suite now pins every behaviour identified by the Analyzer; approved.",
+    "output": {
+     "summary": "The suite now pins every behaviour identified by the Analyzer; approved.",
+     "approved": true,
+     "rubric": {
+      "correctness": 9,
+      "edge_cases": 9,
+      "robustness": 8,
+      "readability": 9
+     },
+     "findings": [
+      "11 focused tests",
+      "Surprising behaviours are documented by tests"
+     ],
+     "required_changes": [],
+     "risks": [
+      "Tests document current behaviour; accents/underscores may be a product bug worth a ticket."
+     ],
+     "score": 8.8
+    }
+   }
+  },
+  {
+   "seq": 49,
+   "workflow_id": "demo_generate-tests",
+   "type": "message",
+   "agent": "reviewer",
+   "t": 15.843,
+   "timestamp": "2026-11-14T13:04:50.700Z",
+   "data": {
+    "sender": "reviewer",
+    "receiver": "orchestrator",
+    "message_type": "review",
+    "content": "APPROVED — quality 8.8/10 (correctness 9, edge cases 9, robustness 8, readability 9). The suite now pins every behaviour identified by the Analyzer; approved.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 50,
+   "workflow_id": "demo_generate-tests",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 15.844,
+   "timestamp": "2026-11-14T13:04:50.701Z",
+   "data": {
+    "decision": "Workflow complete",
+    "reason": "Reviewer approved with quality 8.8/10 (bar: 8.0).",
+    "kind": "complete",
+    "next": [],
+    "iteration": 1
+   }
+  },
+  {
+   "seq": 51,
+   "workflow_id": "demo_generate-tests",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 15.844,
+   "timestamp": "2026-11-14T13:04:50.701Z",
+   "data": {
+    "calls": 7,
+    "input_tokens": 4917,
+    "output_tokens": 2800,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 52,
+   "workflow_id": "demo_generate-tests",
+   "type": "transition",
+   "agent": null,
+   "t": 15.844,
+   "timestamp": "2026-11-14T13:04:50.701Z",
+   "data": {
+    "source": "reviewer",
+    "target": "result",
+    "kind": "complete",
+    "label": ""
+   }
+  },
+  {
+   "seq": 53,
+   "workflow_id": "demo_generate-tests",
+   "type": "workflow_completed",
+   "agent": "orchestrator",
+   "t": 15.846,
+   "timestamp": "2026-11-14T13:04:50.702Z",
+   "data": {
+    "final_result": {
+     "status": "completed",
+     "reason": "Reviewer approved with quality 8.8/10 (bar: 8.0).",
+     "task_type": "TEST_GEN",
+     "agents_used": [
+      "analyzer",
+      "tester",
+      "reviewer"
+     ],
+     "skipped_agents": [
+      "developer"
+     ],
+     "steps": 5,
+     "iterations": 1,
+     "original_code": "import re\n\n\ndef slugify(text: str, max_length: int = 50) -> str:\n    \"\"\"Convert text to a URL-friendly slug.\"\"\"\n    if max_length <= 0:\n        raise ValueError(\"max_length must be positive\")\n    slug = text.lower().strip()\n    slug = re.sub(r\"[^a-z0-9\\s-]\", \"\", slug)\n    slug = re.sub(r\"[\\s_-]+\", \"-\", slug)\n    slug = slug.strip(\"-\")\n    return slug[:max_length].rstrip(\"-\")\n",
+     "final_code": null,
+     "test_code": "import pytest\n\nfrom solution import slugify\n\n\ndef test_basic_sentence():\n    assert slugify(\"Hello World\") == \"hello-world\"\n\n\ndef test_punctuation_removed():\n    assert slugify(\"Hello, World!\") == \"hello-world\"\n\n\ndef test_collapses_whitespace():\n    assert slugify(\"  many   spaces  here \") == \"many-spaces-here\"\n\n\ndef test_empty_string():\n    assert slugify(\"\") == \"\"\n\n\ndef test_invalid_max_length():\n    with pytest.raises(ValueError):\n        slugify(\"abc\", max_length=0)\n\n\ndef test_symbols_only():\n    assert slugify(\"!!!???\") == \"\"\n\n\ndef test_underscores_are_dropped_not_converted():\n    # The first regex deletes \"_\" before the separator regex can see it.\n    assert slugify(\"snake_case_text\") == \"snakecasetext\"\n\n\ndef test_accents_are_dropped():\n    assert slugify(\"Café au lait\") == \"caf-au-lait\"\n\n\ndef test_truncation_strips_trailing_hyphen():\n    assert slugify(\"hello world\", max_length=6) == \"hello\"\n\n\ndef test_repeated_hyphens_collapse():\n    assert slugify(\"a -- b\") == \"a-b\"\n\n\n@pytest.mark.parametrize(\"bad\", [0, -1])\ndef test_non_positive_max_length(bad):\n    with pytest.raises(ValueError):\n        slugify(\"abc\", max_length=bad)\n",
+     "test_results": {
+      "executed": false,
+      "method": "per-case code tracing by the Tester agent; verdict computed from the traces (tests not executed)",
+      "passed": true,
+      "failing_cases": [],
+      "issues": [],
+      "total_cases": 11
+     },
+     "analysis": {
+      "summary": "Five behaviours to pin down; underscores and accents are silently deleted.",
+      "issues": [
+       {
+        "title": "Underscores deleted instead of converted",
+        "severity": "medium",
+        "line": 9,
+        "detail": "[^a-z0-9\\s-] removes '_' before the separator regex runs, so '_' in [\\s_-] is dead code."
+       },
+       {
+        "title": "Non-ASCII letters are dropped",
+        "severity": "medium",
+        "line": 9,
+        "detail": "'Café' becomes 'caf' because é is outside [a-z]."
+       },
+       {
+        "title": "Truncation can end on a hyphen",
+        "severity": "low",
+        "line": 12,
+        "detail": "Handled by rstrip('-') after slicing; worth a regression test."
+       },
+       {
+        "title": "max_length validation",
+        "severity": "low",
+        "line": 6,
+        "detail": "Zero and negative values raise ValueError."
+       }
+      ],
+      "recommendations": [
+       "Test underscores, accents, truncation on a hyphen and symbol-only input explicitly.",
+       "Parametrise the invalid max_length cases."
+      ]
+     },
+     "review": {
+      "summary": "The suite now pins every behaviour identified by the Analyzer; approved.",
+      "approved": true,
+      "rubric": {
+       "correctness": 9,
+       "edge_cases": 9,
+       "robustness": 8,
+       "readability": 9
+      },
+      "findings": [
+       "11 focused tests",
+       "Surprising behaviours are documented by tests"
+      ],
+      "required_changes": [],
+      "risks": [
+       "Tests document current behaviour; accents/underscores may be a product bug worth a ticket."
+      ],
+      "score": 8.8
+     },
+     "usage": {
+      "calls": 7,
+      "input_tokens": 4917,
+      "output_tokens": 2800,
+      "cost_usd": 0.0,
+      "max_cost_usd": 0.5
+     }
+    }
+   }
+  }
+ ]
+}

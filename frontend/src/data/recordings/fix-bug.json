@@ -1,0 +1,1437 @@
+{
+ "scenario": {
+  "id": "fix-bug",
+  "title": "Fix a Python Bug",
+  "short_title": "Fix a Bug",
+  "description": "A function crashes on empty input. Watch the agents analyse it, patch it, catch a flawed first fix and loop back until the tests pass.",
+  "task_type": "BUG_FIX",
+  "highlights": [
+   "4 agents",
+   "Correction loop",
+   "Conditional routing"
+  ],
+  "code": "def calculate_average(numbers):\n    \"\"\"Return the arithmetic mean of an iterable of numbers.\"\"\"\n    return sum(numbers) / len(numbers)\n",
+  "request": "calculate_average crashes on empty input. Fix it: the function must accept any iterable (lists, tuples, generators) and raise ValueError on empty input."
+ },
+ "recording": {
+  "recorded_at": "2026-11-14T13:04:34+00:00",
+  "engine": "LangGraph (backend/app/orchestration/graph.py)",
+  "provider": "mock",
+  "model": "scripted-demo-model",
+  "simulated": true,
+  "status": "completed",
+  "duration_s": 19.459
+ },
+ "events": [
+  {
+   "seq": 1,
+   "workflow_id": "demo_fix-bug",
+   "type": "workflow_started",
+   "agent": "orchestrator",
+   "t": 0.0,
+   "timestamp": "2026-11-14T13:04:15.390Z",
+   "data": {
+    "mode": "demo-recording",
+    "provider": "mock",
+    "model": "scripted-demo-model",
+    "simulated": true,
+    "scenario_id": "fix-bug",
+    "request": "calculate_average crashes on empty input. Fix it: the function must accept any iterable (lists, tuples, generators) and raise ValueError on empty input.",
+    "task_hint": "BUG_FIX",
+    "limits": {
+     "max_iterations": 3,
+     "timeout_s": 180.0,
+     "quality_threshold": 8.0,
+     "min_rubric_score": 8.0,
+     "max_llm_calls": 14,
+     "max_cost_usd": 0.5
+    }
+   }
+  },
+  {
+   "seq": 2,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_started",
+   "agent": "orchestrator",
+   "t": 0.003,
+   "timestamp": "2026-11-14T13:04:15.393Z",
+   "data": {
+    "phase": "planning"
+   }
+  },
+  {
+   "seq": 3,
+   "workflow_id": "demo_fix-bug",
+   "type": "tool_result",
+   "agent": "tools",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:15.394Z",
+   "data": {
+    "tool": "static_analysis",
+    "report": {
+     "syntax_ok": true,
+     "syntax_error": null,
+     "findings": [
+      {
+       "rule": "division-by-len",
+       "severity": "high",
+       "line": 3,
+       "message": "Division by len(...): raises ZeroDivisionError when the collection is empty."
+      }
+     ],
+     "functions": [
+      {
+       "name": "calculate_average",
+       "line": 1,
+       "args": [
+        "numbers"
+       ],
+       "has_docstring": true,
+       "has_type_hints": false
+      }
+     ]
+    },
+    "summary": "1 finding(s) from parser-based checks (ast + pyflakes, code not executed)"
+   }
+  },
+  {
+   "seq": 4,
+   "workflow_id": "demo_fix-bug",
+   "type": "task_classified",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:15.394Z",
+   "data": {
+    "task_type": "BUG_FIX",
+    "confidence": 1.0,
+    "reason": "Mission type given by the selected scenario (no classification call needed)."
+   }
+  },
+  {
+   "seq": 5,
+   "workflow_id": "demo_fix-bug",
+   "type": "plan_created",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:15.394Z",
+   "data": {
+    "task_type": "BUG_FIX",
+    "stages": [
+     [
+      "analyzer"
+     ],
+     [
+      "developer"
+     ],
+     [
+      "tester"
+     ],
+     [
+      "reviewer"
+     ]
+    ],
+    "selected_agents": [
+     "analyzer",
+     "developer",
+     "tester",
+     "reviewer"
+    ],
+    "skipped_agents": [],
+    "subtasks": {
+     "analyzer": "Find the root cause of the defect and list the requirements of the fix.",
+     "developer": "Produce a complete corrected version of the code.",
+     "tester": "Write pytest cases and statically check the corrected code against them.",
+     "reviewer": "Decide whether the fix satisfies the request and is safe to merge."
+    },
+    "rationale": "A fix needs a diagnosis, a patch, independent validation and a final review."
+   }
+  },
+  {
+   "seq": 6,
+   "workflow_id": "demo_fix-bug",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:15.394Z",
+   "data": {
+    "decision": "Select Analyzer, Developer, Tester, Reviewer",
+    "reason": "A fix needs a diagnosis, a patch, independent validation and a final review.",
+    "kind": "plan",
+    "next": [
+     "analyzer",
+     "developer",
+     "tester",
+     "reviewer"
+    ]
+   }
+  },
+  {
+   "seq": 7,
+   "workflow_id": "demo_fix-bug",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:15.394Z",
+   "data": {
+    "decision": "Start with Analyzer",
+    "reason": "The first stage of the plan needs no prior input.",
+    "kind": "dispatch",
+    "next": [
+     "analyzer"
+    ]
+   }
+  },
+  {
+   "seq": 8,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:15.394Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "analyzer",
+    "message_type": "instruction",
+    "content": "Find the root cause of the defect and list the requirements of the fix.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 9,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "tools",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:15.394Z",
+   "data": {
+    "sender": "tools",
+    "receiver": "analyzer",
+    "message_type": "static_facts",
+    "content": "1 verified finding(s): L3 division-by-len (high)",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 10,
+   "workflow_id": "demo_fix-bug",
+   "type": "transition",
+   "agent": null,
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:15.394Z",
+   "data": {
+    "source": "orchestrator",
+    "target": "analyzer",
+    "kind": "dispatch",
+    "label": ""
+   }
+  },
+  {
+   "seq": 11,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_completed",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:15.394Z",
+   "data": {
+    "phase": "planning",
+    "outcome": "success"
+   }
+  },
+  {
+   "seq": 12,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_started",
+   "agent": "analyzer",
+   "t": 0.006,
+   "timestamp": "2026-11-14T13:04:15.396Z",
+   "data": {
+    "iteration": 0,
+    "inputs": {
+     "instruction": "Find the root cause of the defect and list the requirements of the fix.",
+     "request": "calculate_average crashes on empty input. Fix it: the function must accept any iterable (lists, tuples, generators) and raise ValueError on empty input.",
+     "code_lines": 4,
+     "static_findings": 1
+    },
+    "dispatch_id": 1
+   }
+  },
+  {
+   "seq": 13,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_completed",
+   "agent": "analyzer",
+   "t": 2.609,
+   "timestamp": "2026-11-14T13:04:17.999Z",
+   "data": {
+    "outcome": "success",
+    "duration_ms": 2602,
+    "iteration": 0,
+    "summary": "Division by zero on empty input; len() also breaks the 'any iterable' requirement. 3 issue(s) found. Most severe: ZeroDivisionError on empty input (high).",
+    "output": {
+     "summary": "Division by zero on empty input; len() also breaks the 'any iterable' requirement.",
+     "issues": [
+      {
+       "title": "ZeroDivisionError on empty input",
+       "severity": "high",
+       "line": 3,
+       "detail": "len([]) is 0, so sum([]) / len([]) raises ZeroDivisionError instead of ValueError."
+      },
+      {
+       "title": "len() is not defined for generators",
+       "severity": "medium",
+       "line": 3,
+       "detail": "The request requires generators; len(generator) raises TypeError, and sum() would consume the generator first."
+      },
+      {
+       "title": "No type hints or documented exceptions",
+       "severity": "low",
+       "line": 1,
+       "detail": "The contract (accepted inputs, raised errors) is not visible to callers."
+      }
+     ],
+     "recommendations": [
+      "Materialise the iterable once (list(numbers)) before computing sum and length.",
+      "Raise ValueError with a clear message when there are no values.",
+      "Add type hints and document the raised exception."
+     ]
+    }
+   }
+  },
+  {
+   "seq": 14,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 2.609,
+   "timestamp": "2026-11-14T13:04:17.999Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "orchestrator",
+    "message_type": "analysis",
+    "content": "Division by zero on empty input; len() also breaks the 'any iterable' requirement. 3 issue(s) found. Most severe: ZeroDivisionError on empty input (high).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 15,
+   "workflow_id": "demo_fix-bug",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 2.61,
+   "timestamp": "2026-11-14T13:04:18.000Z",
+   "data": {
+    "decision": "Hand off to Developer",
+    "reason": "Analyzer completed successfully.",
+    "kind": "dispatch",
+    "next": [
+     "developer"
+    ],
+    "iteration": 0
+   }
+  },
+  {
+   "seq": 16,
+   "workflow_id": "demo_fix-bug",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 2.61,
+   "timestamp": "2026-11-14T13:04:18.000Z",
+   "data": {
+    "calls": 1,
+    "input_tokens": 393,
+    "output_tokens": 400,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 17,
+   "workflow_id": "demo_fix-bug",
+   "type": "transition",
+   "agent": null,
+   "t": 2.61,
+   "timestamp": "2026-11-14T13:04:18.000Z",
+   "data": {
+    "source": "analyzer",
+    "target": "developer",
+    "kind": "handoff",
+    "label": ""
+   }
+  },
+  {
+   "seq": 18,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 2.61,
+   "timestamp": "2026-11-14T13:04:18.000Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "developer",
+    "message_type": "instruction",
+    "content": "Produce a complete corrected version of the code.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 19,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 2.61,
+   "timestamp": "2026-11-14T13:04:18.000Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "developer",
+    "message_type": "analysis",
+    "content": "Division by zero on empty input; len() also breaks the 'any iterable' requirement. 3 issue(s) found. Most severe: ZeroDivisionError on empty input (high).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 20,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_started",
+   "agent": "developer",
+   "t": 2.612,
+   "timestamp": "2026-11-14T13:04:18.001Z",
+   "data": {
+    "iteration": 0,
+    "inputs": {
+     "analysis": "Division by zero on empty input; len() also breaks the 'any iterable' requirement."
+    },
+    "dispatch_id": 2
+   }
+  },
+  {
+   "seq": 21,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_completed",
+   "agent": "developer",
+   "t": 5.613,
+   "timestamp": "2026-11-14T13:04:21.003Z",
+   "data": {
+    "outcome": "success",
+    "duration_ms": 3001,
+    "iteration": 0,
+    "summary": "Added an explicit empty-input guard that raises ValueError. (1 change(s))",
+    "output": {
+     "summary": "Added an explicit empty-input guard that raises ValueError.",
+     "code": "def calculate_average(numbers):\n    \"\"\"Return the arithmetic mean of an iterable of numbers.\"\"\"\n    if not numbers:\n        raise ValueError(\"calculate_average() requires at least one number\")\n    return sum(numbers) / len(numbers)\n",
+     "changes": [
+      "Raise ValueError when the input is empty"
+     ]
+    }
+   }
+  },
+  {
+   "seq": 22,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "developer",
+   "t": 5.614,
+   "timestamp": "2026-11-14T13:04:21.003Z",
+   "data": {
+    "sender": "developer",
+    "receiver": "orchestrator",
+    "message_type": "code_proposal",
+    "content": "Added an explicit empty-input guard that raises ValueError. (1 change(s))",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 23,
+   "workflow_id": "demo_fix-bug",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 5.614,
+   "timestamp": "2026-11-14T13:04:21.004Z",
+   "data": {
+    "decision": "Hand off to Tester",
+    "reason": "Developer completed successfully.",
+    "kind": "dispatch",
+    "next": [
+     "tester"
+    ],
+    "iteration": 0
+   }
+  },
+  {
+   "seq": 24,
+   "workflow_id": "demo_fix-bug",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 5.614,
+   "timestamp": "2026-11-14T13:04:21.004Z",
+   "data": {
+    "calls": 2,
+    "input_tokens": 848,
+    "output_tokens": 800,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 25,
+   "workflow_id": "demo_fix-bug",
+   "type": "transition",
+   "agent": null,
+   "t": 5.614,
+   "timestamp": "2026-11-14T13:04:21.004Z",
+   "data": {
+    "source": "developer",
+    "target": "tester",
+    "kind": "handoff",
+    "label": ""
+   }
+  },
+  {
+   "seq": 26,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 5.614,
+   "timestamp": "2026-11-14T13:04:21.004Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "tester",
+    "message_type": "instruction",
+    "content": "Write pytest cases and statically check the corrected code against them.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 27,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 5.615,
+   "timestamp": "2026-11-14T13:04:21.004Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "tester",
+    "message_type": "analysis",
+    "content": "Division by zero on empty input; len() also breaks the 'any iterable' requirement. 3 issue(s) found. Most severe: ZeroDivisionError on empty input (high).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 28,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "developer",
+   "t": 5.615,
+   "timestamp": "2026-11-14T13:04:21.004Z",
+   "data": {
+    "sender": "developer",
+    "receiver": "tester",
+    "message_type": "code_proposal",
+    "content": "Added an explicit empty-input guard that raises ValueError. (1 change(s))",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 29,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_started",
+   "agent": "tester",
+   "t": 5.617,
+   "timestamp": "2026-11-14T13:04:21.006Z",
+   "data": {
+    "iteration": 0,
+    "inputs": {
+     "focus": "Validate the Developer's corrected code against the user's requirements.",
+     "code_under_test": "corrected code",
+     "analysis": "Division by zero on empty input; len() also breaks the 'any iterable' requirement."
+    },
+    "dispatch_id": 3
+   }
+  },
+  {
+   "seq": 30,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_completed",
+   "agent": "tester",
+   "t": 9.827,
+   "timestamp": "2026-11-14T13:04:25.217Z",
+   "data": {
+    "outcome": "validation_failed",
+    "duration_ms": 4210,
+    "iteration": 0,
+    "summary": "8 cases generated. Static check: generator inputs still fail with this patch. [8 tests generated, not executed — traced: 2 case(s) expected to fail]",
+    "output": {
+     "summary": "8 cases generated. Static check: generator inputs still fail with this patch.",
+     "test_code": "import math\n\nimport pytest\n\nfrom solution import calculate_average\n\n\ndef test_list_of_ints():\n    assert calculate_average([1, 2, 3, 4]) == 2.5\n\n\ndef test_single_value():\n    assert calculate_average([7]) == 7\n\n\ndef test_floats():\n    assert math.isclose(calculate_average([0.1, 0.2, 0.3]), 0.2)\n\n\ndef test_negative_numbers():\n    assert calculate_average([-2, 2, -4, 4]) == 0\n\n\ndef test_tuple_input():\n    assert calculate_average((10, 20)) == 15\n\n\ndef test_generator_input():\n    assert calculate_average(x for x in [2, 4, 6]) == 4\n\n\ndef test_empty_list_raises():\n    with pytest.raises(ValueError):\n        calculate_average([])\n\n\ndef test_empty_generator_raises():\n    with pytest.raises(ValueError):\n        calculate_average(x for x in [])\n",
+     "cases": [
+      {
+       "name": "test_list_of_ints",
+       "category": "nominal",
+       "description": "Mean of a list of integers"
+      },
+      {
+       "name": "test_single_value",
+       "category": "edge",
+       "description": "One element returns itself"
+      },
+      {
+       "name": "test_floats",
+       "category": "nominal",
+       "description": "Float precision handled with isclose"
+      },
+      {
+       "name": "test_negative_numbers",
+       "category": "edge",
+       "description": "Negative values cancel out"
+      },
+      {
+       "name": "test_tuple_input",
+       "category": "nominal",
+       "description": "Tuples are accepted"
+      },
+      {
+       "name": "test_generator_input",
+       "category": "edge",
+       "description": "Generators are accepted"
+      },
+      {
+       "name": "test_empty_list_raises",
+       "category": "error",
+       "description": "Empty list raises ValueError"
+      },
+      {
+       "name": "test_empty_generator_raises",
+       "category": "error",
+       "description": "Empty generator raises ValueError"
+      }
+     ],
+     "traces": [
+      {
+       "case": "test_list_of_ints",
+       "trace": "Traced: mean of a list of integers.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_single_value",
+       "trace": "Traced: one element returns itself.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_floats",
+       "trace": "Traced: float precision handled with isclose.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_negative_numbers",
+       "trace": "Traced: negative values cancel out.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_tuple_input",
+       "trace": "Traced: tuples are accepted.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_generator_input",
+       "trace": "numbers=<generator 2,4,6> -> `if not numbers` is False (generator objects are always truthy) -> sum(numbers)=12 consumes it -> len(numbers) on a generator",
+       "expected": "returns 4",
+       "predicted": "raises TypeError: object of type 'generator' has no len()",
+       "passes": false
+      },
+      {
+       "case": "test_empty_list_raises",
+       "trace": "Traced: empty list raises valueerror.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_empty_generator_raises",
+       "trace": "numbers=<empty generator> -> `if not numbers` is False -> sum(numbers)=0 -> len(numbers)",
+       "expected": "raises ValueError",
+       "predicted": "raises TypeError, not ValueError",
+       "passes": false
+      }
+     ],
+     "validation": {
+      "passed": false,
+      "failing_cases": [
+       "test_generator_input",
+       "test_empty_generator_raises"
+      ],
+      "issues": [
+       "A generator object is always truthy, so `if not numbers` never detects an empty generator.",
+       "sum(numbers) consumes the generator, then len(numbers) raises TypeError.",
+       "test_generator_input: expected returns 4, but raises TypeError: object of type 'generator' has no len()",
+       "test_empty_generator_raises: expected raises ValueError, but raises TypeError, not ValueError"
+      ]
+     }
+    },
+    "test_results": {
+     "executed": false,
+     "method": "per-case code tracing by the Tester agent; verdict computed from the traces (tests not executed)",
+     "passed": false,
+     "failing_cases": [
+      "test_generator_input",
+      "test_empty_generator_raises"
+     ],
+     "issues": [
+      "A generator object is always truthy, so `if not numbers` never detects an empty generator.",
+      "sum(numbers) consumes the generator, then len(numbers) raises TypeError.",
+      "test_generator_input: expected returns 4, but raises TypeError: object of type 'generator' has no len()",
+      "test_empty_generator_raises: expected raises ValueError, but raises TypeError, not ValueError"
+     ],
+     "total_cases": 8
+    }
+   }
+  },
+  {
+   "seq": 31,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "tester",
+   "t": 9.828,
+   "timestamp": "2026-11-14T13:04:25.217Z",
+   "data": {
+    "sender": "tester",
+    "receiver": "orchestrator",
+    "message_type": "test_report",
+    "content": "8 cases generated. Static check: generator inputs still fail with this patch. [8 tests generated, not executed — traced: 2 case(s) expected to fail]",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 32,
+   "workflow_id": "demo_fix-bug",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 9.829,
+   "timestamp": "2026-11-14T13:04:25.219Z",
+   "data": {
+    "decision": "Retry correction with Developer",
+    "reason": "Static validation failed (test_generator_input, test_empty_generator_raises). Sending the report back to the Developer (correction 1/3).",
+    "kind": "retry",
+    "next": [
+     "developer"
+    ],
+    "iteration": 1
+   }
+  },
+  {
+   "seq": 33,
+   "workflow_id": "demo_fix-bug",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 9.829,
+   "timestamp": "2026-11-14T13:04:25.219Z",
+   "data": {
+    "calls": 4,
+    "input_tokens": 2182,
+    "output_tokens": 1600,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 34,
+   "workflow_id": "demo_fix-bug",
+   "type": "iteration",
+   "agent": "orchestrator",
+   "t": 9.829,
+   "timestamp": "2026-11-14T13:04:25.219Z",
+   "data": {
+    "iteration": 1,
+    "max_iterations": 3,
+    "target": "developer"
+   }
+  },
+  {
+   "seq": 35,
+   "workflow_id": "demo_fix-bug",
+   "type": "transition",
+   "agent": null,
+   "t": 9.83,
+   "timestamp": "2026-11-14T13:04:25.219Z",
+   "data": {
+    "source": "tester",
+    "target": "developer",
+    "kind": "retry",
+    "label": "tests failed"
+   }
+  },
+  {
+   "seq": 36,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 9.83,
+   "timestamp": "2026-11-14T13:04:25.219Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "developer",
+    "message_type": "instruction",
+    "content": "Produce a complete corrected version of the code.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 37,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 9.83,
+   "timestamp": "2026-11-14T13:04:25.219Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "developer",
+    "message_type": "analysis",
+    "content": "Division by zero on empty input; len() also breaks the 'any iterable' requirement. 3 issue(s) found. Most severe: ZeroDivisionError on empty input (high).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 38,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "tester",
+   "t": 9.83,
+   "timestamp": "2026-11-14T13:04:25.219Z",
+   "data": {
+    "sender": "tester",
+    "receiver": "developer",
+    "message_type": "test_report",
+    "content": "8 cases generated. Static check: generator inputs still fail with this patch. [8 tests generated, not executed — traced: 2 case(s) expected to fail]",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 39,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_started",
+   "agent": "developer",
+   "t": 9.831,
+   "timestamp": "2026-11-14T13:04:25.221Z",
+   "data": {
+    "iteration": 1,
+    "inputs": {
+     "analysis": "Division by zero on empty input; len() also breaks the 'any iterable' requirement.",
+     "previous_attempt": true,
+     "test_feedback": [
+      "A generator object is always truthy, so `if not numbers` never detects an empty generator.",
+      "sum(numbers) consumes the generator, then len(numbers) raises TypeError.",
+      "test_generator_input: expected returns 4, but raises TypeError: object of type 'generator' has no len()",
+      "test_empty_generator_raises: expected raises ValueError, but raises TypeError, not ValueError"
+     ]
+    },
+    "dispatch_id": 4
+   }
+  },
+  {
+   "seq": 40,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_completed",
+   "agent": "developer",
+   "t": 12.836,
+   "timestamp": "2026-11-14T13:04:28.226Z",
+   "data": {
+    "outcome": "success",
+    "duration_ms": 3005,
+    "iteration": 1,
+    "summary": "Materialise the iterable once, then validate and compute; generators now work. (3 change(s))",
+    "output": {
+     "summary": "Materialise the iterable once, then validate and compute; generators now work.",
+     "code": "from collections.abc import Iterable\n\n\ndef calculate_average(numbers: Iterable[float]) -> float:\n    \"\"\"Return the arithmetic mean of an iterable of numbers.\n\n    Raises:\n        ValueError: if ``numbers`` is empty.\n    \"\"\"\n    values = list(numbers)  # materialise once: generators can only be read once\n    if not values:\n        raise ValueError(\"calculate_average() requires at least one number\")\n    return sum(values) / len(values)\n",
+     "changes": [
+      "Convert the input to a list once so generators can be measured",
+      "Check emptiness on the materialised list (works for empty generators)",
+      "Add type hints and document ValueError"
+     ]
+    }
+   }
+  },
+  {
+   "seq": 41,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "developer",
+   "t": 12.836,
+   "timestamp": "2026-11-14T13:04:28.226Z",
+   "data": {
+    "sender": "developer",
+    "receiver": "orchestrator",
+    "message_type": "code_proposal",
+    "content": "Materialise the iterable once, then validate and compute; generators now work. (3 change(s))",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 42,
+   "workflow_id": "demo_fix-bug",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 12.838,
+   "timestamp": "2026-11-14T13:04:28.228Z",
+   "data": {
+    "decision": "Hand off to Tester",
+    "reason": "Developer completed successfully.",
+    "kind": "dispatch",
+    "next": [
+     "tester"
+    ],
+    "iteration": 1
+   }
+  },
+  {
+   "seq": 43,
+   "workflow_id": "demo_fix-bug",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 12.838,
+   "timestamp": "2026-11-14T13:04:28.228Z",
+   "data": {
+    "calls": 5,
+    "input_tokens": 2824,
+    "output_tokens": 2000,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 44,
+   "workflow_id": "demo_fix-bug",
+   "type": "transition",
+   "agent": null,
+   "t": 12.838,
+   "timestamp": "2026-11-14T13:04:28.228Z",
+   "data": {
+    "source": "developer",
+    "target": "tester",
+    "kind": "handoff",
+    "label": ""
+   }
+  },
+  {
+   "seq": 45,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 12.838,
+   "timestamp": "2026-11-14T13:04:28.228Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "tester",
+    "message_type": "instruction",
+    "content": "Write pytest cases and statically check the corrected code against them.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 46,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 12.838,
+   "timestamp": "2026-11-14T13:04:28.228Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "tester",
+    "message_type": "analysis",
+    "content": "Division by zero on empty input; len() also breaks the 'any iterable' requirement. 3 issue(s) found. Most severe: ZeroDivisionError on empty input (high).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 47,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "developer",
+   "t": 12.838,
+   "timestamp": "2026-11-14T13:04:28.228Z",
+   "data": {
+    "sender": "developer",
+    "receiver": "tester",
+    "message_type": "code_proposal",
+    "content": "Materialise the iterable once, then validate and compute; generators now work. (3 change(s))",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 48,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_started",
+   "agent": "tester",
+   "t": 12.84,
+   "timestamp": "2026-11-14T13:04:28.230Z",
+   "data": {
+    "iteration": 1,
+    "inputs": {
+     "focus": "Validate the Developer's corrected code against the user's requirements.",
+     "code_under_test": "corrected code",
+     "analysis": "Division by zero on empty input; len() also breaks the 'any iterable' requirement."
+    },
+    "dispatch_id": 5
+   }
+  },
+  {
+   "seq": 49,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_completed",
+   "agent": "tester",
+   "t": 17.049,
+   "timestamp": "2026-11-14T13:04:32.439Z",
+   "data": {
+    "outcome": "success",
+    "duration_ms": 4208,
+    "iteration": 1,
+    "summary": "8 cases generated. Static check: all cases are expected to pass. [8 tests generated, not executed — traced: all cases expected to pass]",
+    "output": {
+     "summary": "8 cases generated. Static check: all cases are expected to pass.",
+     "test_code": "import math\n\nimport pytest\n\nfrom solution import calculate_average\n\n\ndef test_list_of_ints():\n    assert calculate_average([1, 2, 3, 4]) == 2.5\n\n\ndef test_single_value():\n    assert calculate_average([7]) == 7\n\n\ndef test_floats():\n    assert math.isclose(calculate_average([0.1, 0.2, 0.3]), 0.2)\n\n\ndef test_negative_numbers():\n    assert calculate_average([-2, 2, -4, 4]) == 0\n\n\ndef test_tuple_input():\n    assert calculate_average((10, 20)) == 15\n\n\ndef test_generator_input():\n    assert calculate_average(x for x in [2, 4, 6]) == 4\n\n\ndef test_empty_list_raises():\n    with pytest.raises(ValueError):\n        calculate_average([])\n\n\ndef test_empty_generator_raises():\n    with pytest.raises(ValueError):\n        calculate_average(x for x in [])\n",
+     "cases": [
+      {
+       "name": "test_list_of_ints",
+       "category": "nominal",
+       "description": "Mean of a list of integers"
+      },
+      {
+       "name": "test_single_value",
+       "category": "edge",
+       "description": "One element returns itself"
+      },
+      {
+       "name": "test_floats",
+       "category": "nominal",
+       "description": "Float precision handled with isclose"
+      },
+      {
+       "name": "test_negative_numbers",
+       "category": "edge",
+       "description": "Negative values cancel out"
+      },
+      {
+       "name": "test_tuple_input",
+       "category": "nominal",
+       "description": "Tuples are accepted"
+      },
+      {
+       "name": "test_generator_input",
+       "category": "edge",
+       "description": "Generators are accepted"
+      },
+      {
+       "name": "test_empty_list_raises",
+       "category": "error",
+       "description": "Empty list raises ValueError"
+      },
+      {
+       "name": "test_empty_generator_raises",
+       "category": "error",
+       "description": "Empty generator raises ValueError"
+      }
+     ],
+     "traces": [
+      {
+       "case": "test_list_of_ints",
+       "trace": "Traced: mean of a list of integers.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_single_value",
+       "trace": "Traced: one element returns itself.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_floats",
+       "trace": "Traced: float precision handled with isclose.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_negative_numbers",
+       "trace": "Traced: negative values cancel out.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_tuple_input",
+       "trace": "Traced: tuples are accepted.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_generator_input",
+       "trace": "Traced: generators are accepted.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_empty_list_raises",
+       "trace": "Traced: empty list raises valueerror.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_empty_generator_raises",
+       "trace": "Traced: empty generator raises valueerror.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      }
+     ],
+     "validation": {
+      "passed": true,
+      "failing_cases": [],
+      "issues": []
+     }
+    },
+    "test_results": {
+     "executed": false,
+     "method": "per-case code tracing by the Tester agent; verdict computed from the traces (tests not executed)",
+     "passed": true,
+     "failing_cases": [],
+     "issues": [],
+     "total_cases": 8
+    }
+   }
+  },
+  {
+   "seq": 50,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "tester",
+   "t": 17.049,
+   "timestamp": "2026-11-14T13:04:32.439Z",
+   "data": {
+    "sender": "tester",
+    "receiver": "orchestrator",
+    "message_type": "test_report",
+    "content": "8 cases generated. Static check: all cases are expected to pass. [8 tests generated, not executed — traced: all cases expected to pass]",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 51,
+   "workflow_id": "demo_fix-bug",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 17.05,
+   "timestamp": "2026-11-14T13:04:32.440Z",
+   "data": {
+    "decision": "Hand off to Reviewer",
+    "reason": "Tester completed successfully.",
+    "kind": "dispatch",
+    "next": [
+     "reviewer"
+    ],
+    "iteration": 1
+   }
+  },
+  {
+   "seq": 52,
+   "workflow_id": "demo_fix-bug",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 17.05,
+   "timestamp": "2026-11-14T13:04:32.440Z",
+   "data": {
+    "calls": 7,
+    "input_tokens": 4256,
+    "output_tokens": 2800,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 53,
+   "workflow_id": "demo_fix-bug",
+   "type": "transition",
+   "agent": null,
+   "t": 17.05,
+   "timestamp": "2026-11-14T13:04:32.440Z",
+   "data": {
+    "source": "tester",
+    "target": "reviewer",
+    "kind": "handoff",
+    "label": ""
+   }
+  },
+  {
+   "seq": 54,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 17.05,
+   "timestamp": "2026-11-14T13:04:32.440Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "reviewer",
+    "message_type": "instruction",
+    "content": "Decide whether the fix satisfies the request and is safe to merge.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 55,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 17.05,
+   "timestamp": "2026-11-14T13:04:32.440Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "reviewer",
+    "message_type": "analysis",
+    "content": "Division by zero on empty input; len() also breaks the 'any iterable' requirement. 3 issue(s) found. Most severe: ZeroDivisionError on empty input (high).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 56,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "developer",
+   "t": 17.05,
+   "timestamp": "2026-11-14T13:04:32.440Z",
+   "data": {
+    "sender": "developer",
+    "receiver": "reviewer",
+    "message_type": "code_proposal",
+    "content": "Materialise the iterable once, then validate and compute; generators now work. (3 change(s))",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 57,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "tester",
+   "t": 17.05,
+   "timestamp": "2026-11-14T13:04:32.440Z",
+   "data": {
+    "sender": "tester",
+    "receiver": "reviewer",
+    "message_type": "test_report",
+    "content": "8 cases generated. Static check: all cases are expected to pass. [8 tests generated, not executed — traced: all cases expected to pass]",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 58,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_started",
+   "agent": "reviewer",
+   "t": 17.053,
+   "timestamp": "2026-11-14T13:04:32.443Z",
+   "data": {
+    "iteration": 1,
+    "inputs": {
+     "deliverable": "the corrected code",
+     "corrected_code": true,
+     "test_report": "8 cases generated. Static check: all cases are expected to pass."
+    },
+    "dispatch_id": 6
+   }
+  },
+  {
+   "seq": 59,
+   "workflow_id": "demo_fix-bug",
+   "type": "agent_completed",
+   "agent": "reviewer",
+   "t": 19.456,
+   "timestamp": "2026-11-14T13:04:34.846Z",
+   "data": {
+    "outcome": "approved",
+    "duration_ms": 2403,
+    "iteration": 1,
+    "summary": "APPROVED — quality 9.0/10 (correctness 9, edge cases 9, robustness 9, readability 9). The patch meets every requirement in the request; approved.",
+    "output": {
+     "summary": "The patch meets every requirement in the request; approved.",
+     "approved": true,
+     "rubric": {
+      "correctness": 9,
+      "edge_cases": 9,
+      "robustness": 9,
+      "readability": 9
+     },
+     "findings": [
+      "Empty input now raises ValueError with an explicit message.",
+      "Lists, tuples and generators are supported by materialising once.",
+      "Type hints and docstring document the contract."
+     ],
+     "required_changes": [],
+     "risks": [
+      "list(numbers) copies the input: memory grows with very large iterables (acceptable here)."
+     ],
+     "score": 9.0
+    }
+   }
+  },
+  {
+   "seq": 60,
+   "workflow_id": "demo_fix-bug",
+   "type": "message",
+   "agent": "reviewer",
+   "t": 19.457,
+   "timestamp": "2026-11-14T13:04:34.846Z",
+   "data": {
+    "sender": "reviewer",
+    "receiver": "orchestrator",
+    "message_type": "review",
+    "content": "APPROVED — quality 9.0/10 (correctness 9, edge cases 9, robustness 9, readability 9). The patch meets every requirement in the request; approved.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 61,
+   "workflow_id": "demo_fix-bug",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 19.458,
+   "timestamp": "2026-11-14T13:04:34.848Z",
+   "data": {
+    "decision": "Workflow complete",
+    "reason": "Reviewer approved with quality 9.0/10 (bar: 8.0).",
+    "kind": "complete",
+    "next": [],
+    "iteration": 1
+   }
+  },
+  {
+   "seq": 62,
+   "workflow_id": "demo_fix-bug",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 19.458,
+   "timestamp": "2026-11-14T13:04:34.848Z",
+   "data": {
+    "calls": 8,
+    "input_tokens": 5017,
+    "output_tokens": 3200,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 63,
+   "workflow_id": "demo_fix-bug",
+   "type": "transition",
+   "agent": null,
+   "t": 19.458,
+   "timestamp": "2026-11-14T13:04:34.848Z",
+   "data": {
+    "source": "reviewer",
+    "target": "result",
+    "kind": "complete",
+    "label": ""
+   }
+  },
+  {
+   "seq": 64,
+   "workflow_id": "demo_fix-bug",
+   "type": "workflow_completed",
+   "agent": "orchestrator",
+   "t": 19.459,
+   "timestamp": "2026-11-14T13:04:34.849Z",
+   "data": {
+    "final_result": {
+     "status": "completed",
+     "reason": "Reviewer approved with quality 9.0/10 (bar: 8.0).",
+     "task_type": "BUG_FIX",
+     "agents_used": [
+      "analyzer",
+      "developer",
+      "tester",
+      "reviewer"
+     ],
+     "skipped_agents": [],
+     "steps": 6,
+     "iterations": 1,
+     "original_code": "def calculate_average(numbers):\n    \"\"\"Return the arithmetic mean of an iterable of numbers.\"\"\"\n    return sum(numbers) / len(numbers)\n",
+     "final_code": "from collections.abc import Iterable\n\n\ndef calculate_average(numbers: Iterable[float]) -> float:\n    \"\"\"Return the arithmetic mean of an iterable of numbers.\n\n    Raises:\n        ValueError: if ``numbers`` is empty.\n    \"\"\"\n    values = list(numbers)  # materialise once: generators can only be read once\n    if not values:\n        raise ValueError(\"calculate_average() requires at least one number\")\n    return sum(values) / len(values)\n",
+     "test_code": "import math\n\nimport pytest\n\nfrom solution import calculate_average\n\n\ndef test_list_of_ints():\n    assert calculate_average([1, 2, 3, 4]) == 2.5\n\n\ndef test_single_value():\n    assert calculate_average([7]) == 7\n\n\ndef test_floats():\n    assert math.isclose(calculate_average([0.1, 0.2, 0.3]), 0.2)\n\n\ndef test_negative_numbers():\n    assert calculate_average([-2, 2, -4, 4]) == 0\n\n\ndef test_tuple_input():\n    assert calculate_average((10, 20)) == 15\n\n\ndef test_generator_input():\n    assert calculate_average(x for x in [2, 4, 6]) == 4\n\n\ndef test_empty_list_raises():\n    with pytest.raises(ValueError):\n        calculate_average([])\n\n\ndef test_empty_generator_raises():\n    with pytest.raises(ValueError):\n        calculate_average(x for x in [])\n",
+     "test_results": {
+      "executed": false,
+      "method": "per-case code tracing by the Tester agent; verdict computed from the traces (tests not executed)",
+      "passed": true,
+      "failing_cases": [],
+      "issues": [],
+      "total_cases": 8
+     },
+     "analysis": {
+      "summary": "Division by zero on empty input; len() also breaks the 'any iterable' requirement.",
+      "issues": [
+       {
+        "title": "ZeroDivisionError on empty input",
+        "severity": "high",
+        "line": 3,
+        "detail": "len([]) is 0, so sum([]) / len([]) raises ZeroDivisionError instead of ValueError."
+       },
+       {
+        "title": "len() is not defined for generators",
+        "severity": "medium",
+        "line": 3,
+        "detail": "The request requires generators; len(generator) raises TypeError, and sum() would consume the generator first."
+       },
+       {
+        "title": "No type hints or documented exceptions",
+        "severity": "low",
+        "line": 1,
+        "detail": "The contract (accepted inputs, raised errors) is not visible to callers."
+       }
+      ],
+      "recommendations": [
+       "Materialise the iterable once (list(numbers)) before computing sum and length.",
+       "Raise ValueError with a clear message when there are no values.",
+       "Add type hints and document the raised exception."
+      ]
+     },
+     "review": {
+      "summary": "The patch meets every requirement in the request; approved.",
+      "approved": true,
+      "rubric": {
+       "correctness": 9,
+       "edge_cases": 9,
+       "robustness": 9,
+       "readability": 9
+      },
+      "findings": [
+       "Empty input now raises ValueError with an explicit message.",
+       "Lists, tuples and generators are supported by materialising once.",
+       "Type hints and docstring document the contract."
+      ],
+      "required_changes": [],
+      "risks": [
+       "list(numbers) copies the input: memory grows with very large iterables (acceptable here)."
+      ],
+      "score": 9.0
+     },
+     "usage": {
+      "calls": 8,
+      "input_tokens": 5017,
+      "output_tokens": 3200,
+      "cost_usd": 0.0,
+      "max_cost_usd": 0.5
+     }
+    }
+   }
+  }
+ ]
+}

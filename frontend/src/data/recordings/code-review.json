@@ -1,0 +1,882 @@
+{
+ "scenario": {
+  "id": "code-review",
+  "title": "Review My Code",
+  "short_title": "Code Review",
+  "description": "Two independent reviews run at the same time (quality and testability), then the Reviewer merges them into a single verdict.",
+  "task_type": "CODE_REVIEW",
+  "highlights": [
+   "Parallel execution",
+   "Fan-out / fan-in",
+   "Aggregated verdict"
+  ],
+  "code": "import sqlite3\n\n\ndef get_user_orders(db_path, user_id, statuses=[]):\n    conn = sqlite3.connect(db_path)\n    cursor = conn.cursor()\n    query = \"SELECT id, total, status FROM orders WHERE user_id = '%s'\" % user_id\n    if statuses:\n        query += \" AND status IN (%s)\" % \",\".join(\"'\" + s + \"'\" for s in statuses)\n    try:\n        rows = cursor.execute(query).fetchall()\n    except:\n        rows = []\n    total = 0\n    for r in rows:\n        total = total + r[1]\n    return {\"orders\": rows, \"total\": total}\n",
+  "request": "Review this function before it goes to production: quality, risks and testability."
+ },
+ "recording": {
+  "recorded_at": "2026-11-14T13:04:57+00:00",
+  "engine": "LangGraph (backend/app/orchestration/graph.py)",
+  "provider": "mock",
+  "model": "scripted-demo-model",
+  "simulated": true,
+  "status": "completed",
+  "duration_s": 6.623
+ },
+ "events": [
+  {
+   "seq": 1,
+   "workflow_id": "demo_code-review",
+   "type": "workflow_started",
+   "agent": "orchestrator",
+   "t": 0.0,
+   "timestamp": "2026-11-14T13:04:50.707Z",
+   "data": {
+    "mode": "demo-recording",
+    "provider": "mock",
+    "model": "scripted-demo-model",
+    "simulated": true,
+    "scenario_id": "code-review",
+    "request": "Review this function before it goes to production: quality, risks and testability.",
+    "task_hint": "CODE_REVIEW",
+    "limits": {
+     "max_iterations": 3,
+     "timeout_s": 180.0,
+     "quality_threshold": 8.0,
+     "min_rubric_score": 8.0,
+     "max_llm_calls": 14,
+     "max_cost_usd": 0.5
+    }
+   }
+  },
+  {
+   "seq": 2,
+   "workflow_id": "demo_code-review",
+   "type": "agent_started",
+   "agent": "orchestrator",
+   "t": 0.001,
+   "timestamp": "2026-11-14T13:04:50.708Z",
+   "data": {
+    "phase": "planning"
+   }
+  },
+  {
+   "seq": 3,
+   "workflow_id": "demo_code-review",
+   "type": "tool_result",
+   "agent": "tools",
+   "t": 0.003,
+   "timestamp": "2026-11-14T13:04:50.710Z",
+   "data": {
+    "tool": "static_analysis",
+    "report": {
+     "syntax_ok": true,
+     "syntax_error": null,
+     "findings": [
+      {
+       "rule": "mutable-default",
+       "severity": "low",
+       "line": 4,
+       "message": "Mutable default argument in get_user_orders(): shared between calls; use None."
+      },
+      {
+       "rule": "resource-leak",
+       "severity": "high",
+       "line": 5,
+       "message": "connect() result is not managed by `with`: may never be closed."
+      },
+      {
+       "rule": "sql-injection",
+       "severity": "critical",
+       "line": 7,
+       "message": "SQL query built by string formatting: use parameter placeholders (?)."
+      },
+      {
+       "rule": "bare-except",
+       "severity": "high",
+       "line": 12,
+       "message": "Bare `except:` catches everything and hides real errors."
+      }
+     ],
+     "functions": [
+      {
+       "name": "get_user_orders",
+       "line": 4,
+       "args": [
+        "db_path",
+        "user_id",
+        "statuses"
+       ],
+       "has_docstring": false,
+       "has_type_hints": false
+      }
+     ]
+    },
+    "summary": "4 finding(s) from parser-based checks (ast + pyflakes, code not executed)"
+   }
+  },
+  {
+   "seq": 4,
+   "workflow_id": "demo_code-review",
+   "type": "task_classified",
+   "agent": "orchestrator",
+   "t": 0.003,
+   "timestamp": "2026-11-14T13:04:50.710Z",
+   "data": {
+    "task_type": "CODE_REVIEW",
+    "confidence": 1.0,
+    "reason": "Mission type given by the selected scenario (no classification call needed)."
+   }
+  },
+  {
+   "seq": 5,
+   "workflow_id": "demo_code-review",
+   "type": "plan_created",
+   "agent": "orchestrator",
+   "t": 0.003,
+   "timestamp": "2026-11-14T13:04:50.710Z",
+   "data": {
+    "task_type": "CODE_REVIEW",
+    "stages": [
+     [
+      "analyzer",
+      "tester"
+     ],
+     [
+      "reviewer"
+     ]
+    ],
+    "selected_agents": [
+     "analyzer",
+     "tester",
+     "reviewer"
+    ],
+    "skipped_agents": [
+     "developer"
+    ],
+    "subtasks": {
+     "analyzer": "Review quality, security and maintainability.",
+     "developer": "",
+     "tester": "Assess testability and the edge cases a test suite must cover.",
+     "reviewer": "Merge both reviews into a single prioritised verdict."
+    },
+    "rationale": "Quality and testability are independent questions: run both in parallel, then merge."
+   }
+  },
+  {
+   "seq": 6,
+   "workflow_id": "demo_code-review",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 0.003,
+   "timestamp": "2026-11-14T13:04:50.710Z",
+   "data": {
+    "decision": "Select Analyzer, Tester, Reviewer",
+    "reason": "Quality and testability are independent questions: run both in parallel, then merge. Skipped: Developer.",
+    "kind": "plan",
+    "next": [
+     "analyzer",
+     "tester",
+     "reviewer"
+    ]
+   }
+  },
+  {
+   "seq": 7,
+   "workflow_id": "demo_code-review",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:50.710Z",
+   "data": {
+    "decision": "Run Analyzer + Tester in parallel",
+    "reason": "These tasks are independent, so they run concurrently.",
+    "kind": "parallel",
+    "next": [
+     "analyzer",
+     "tester"
+    ]
+   }
+  },
+  {
+   "seq": 8,
+   "workflow_id": "demo_code-review",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:50.710Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "analyzer",
+    "message_type": "instruction",
+    "content": "Review quality, security and maintainability.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 9,
+   "workflow_id": "demo_code-review",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:50.710Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "tester",
+    "message_type": "instruction",
+    "content": "Assess testability and the edge cases a test suite must cover.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 10,
+   "workflow_id": "demo_code-review",
+   "type": "message",
+   "agent": "tools",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:50.711Z",
+   "data": {
+    "sender": "tools",
+    "receiver": "analyzer",
+    "message_type": "static_facts",
+    "content": "4 verified finding(s): L4 mutable-default (low); L5 resource-leak (high); L7 sql-injection (critical); L12 bare-except (high)",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 11,
+   "workflow_id": "demo_code-review",
+   "type": "transition",
+   "agent": null,
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:50.711Z",
+   "data": {
+    "source": "orchestrator",
+    "target": "analyzer",
+    "kind": "parallel",
+    "label": ""
+   }
+  },
+  {
+   "seq": 12,
+   "workflow_id": "demo_code-review",
+   "type": "transition",
+   "agent": null,
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:50.711Z",
+   "data": {
+    "source": "orchestrator",
+    "target": "tester",
+    "kind": "parallel",
+    "label": ""
+   }
+  },
+  {
+   "seq": 13,
+   "workflow_id": "demo_code-review",
+   "type": "parallel_started",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:50.711Z",
+   "data": {
+    "agents": [
+     "analyzer",
+     "tester"
+    ]
+   }
+  },
+  {
+   "seq": 14,
+   "workflow_id": "demo_code-review",
+   "type": "agent_completed",
+   "agent": "orchestrator",
+   "t": 0.004,
+   "timestamp": "2026-11-14T13:04:50.711Z",
+   "data": {
+    "phase": "planning",
+    "outcome": "success"
+   }
+  },
+  {
+   "seq": 15,
+   "workflow_id": "demo_code-review",
+   "type": "agent_started",
+   "agent": "analyzer",
+   "t": 0.006,
+   "timestamp": "2026-11-14T13:04:50.712Z",
+   "data": {
+    "iteration": 0,
+    "inputs": {
+     "instruction": "Review quality, security and maintainability.",
+     "request": "Review this function before it goes to production: quality, risks and testability.",
+     "code_lines": 18,
+     "static_findings": 4
+    },
+    "dispatch_id": 1
+   }
+  },
+  {
+   "seq": 16,
+   "workflow_id": "demo_code-review",
+   "type": "agent_started",
+   "agent": "tester",
+   "t": 0.007,
+   "timestamp": "2026-11-14T13:04:50.714Z",
+   "data": {
+    "iteration": 0,
+    "inputs": {
+     "focus": "Assess testability: write the cases a suite must cover; traces show which would fail today. This review runs in parallel with the Analyzer; you do not see its report.",
+     "code_under_test": "original code"
+    },
+    "dispatch_id": 1
+   }
+  },
+  {
+   "seq": 17,
+   "workflow_id": "demo_code-review",
+   "type": "agent_completed",
+   "agent": "analyzer",
+   "t": 2.607,
+   "timestamp": "2026-11-14T13:04:53.314Z",
+   "data": {
+    "outcome": "success",
+    "duration_ms": 2601,
+    "iteration": 0,
+    "summary": "Critical SQL injection plus resource leak and silenced errors. 5 issue(s) found. Most severe: SQL injection (critical).",
+    "output": {
+     "summary": "Critical SQL injection plus resource leak and silenced errors.",
+     "issues": [
+      {
+       "title": "SQL injection",
+       "severity": "critical",
+       "line": 7,
+       "detail": "user_id and statuses are interpolated into SQL. Use ? placeholders."
+      },
+      {
+       "title": "Connection never closed",
+       "severity": "high",
+       "line": 5,
+       "detail": "sqlite3.connect without close/context manager leaks a handle per call."
+      },
+      {
+       "title": "Bare except hides failures",
+       "severity": "high",
+       "line": 12,
+       "detail": "Any error (missing table, locked DB) is reported as 'no orders'."
+      },
+      {
+       "title": "Mutable default argument",
+       "severity": "low",
+       "line": 4,
+       "detail": "statuses=[] is shared between calls; use None or a tuple."
+      },
+      {
+       "title": "Money summed as floats",
+       "severity": "medium",
+       "line": 16,
+       "detail": "Use integer cents or Decimal for monetary totals."
+      }
+     ],
+     "recommendations": [
+      "Parameterise the query, including a generated IN (?, ?, ...) list.",
+      "Use `with closing(sqlite3.connect(...))` and let database errors propagate.",
+      "Compute the total in SQL (SUM(total)) or with Decimal."
+     ]
+    }
+   }
+  },
+  {
+   "seq": 18,
+   "workflow_id": "demo_code-review",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 2.607,
+   "timestamp": "2026-11-14T13:04:53.314Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "orchestrator",
+    "message_type": "analysis",
+    "content": "Critical SQL injection plus resource leak and silenced errors. 5 issue(s) found. Most severe: SQL injection (critical).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 19,
+   "workflow_id": "demo_code-review",
+   "type": "agent_completed",
+   "agent": "tester",
+   "t": 4.216,
+   "timestamp": "2026-11-14T13:04:54.922Z",
+   "data": {
+    "outcome": "success",
+    "duration_ms": 4208,
+    "iteration": 0,
+    "summary": "Hard to test in isolation; 2 of 5 key cases would fail today. [5 tests generated, not executed — traced: 2 case(s) expected to fail]",
+    "output": {
+     "summary": "Hard to test in isolation; 2 of 5 key cases would fail today.",
+     "test_code": "import sqlite3\n\nimport pytest\n\nfrom solution import get_user_orders\n\n\n@pytest.fixture\ndef db(tmp_path):\n    path = tmp_path / \"shop.db\"\n    conn = sqlite3.connect(path)\n    conn.execute(\"CREATE TABLE orders (id INTEGER, user_id TEXT, total REAL, status TEXT)\")\n    conn.executemany(\n        \"INSERT INTO orders VALUES (?, ?, ?, ?)\",\n        [(1, \"u1\", 10.0, \"paid\"), (2, \"u1\", 5.5, \"refunded\"), (3, \"u2\", 99.0, \"paid\")],\n    )\n    conn.commit()\n    conn.close()\n    return str(path)\n\n\ndef test_total_for_user(db):\n    assert get_user_orders(db, \"u1\")[\"total\"] == 15.5\n\n\ndef test_status_filter(db):\n    assert get_user_orders(db, \"u1\", [\"paid\"])[\"total\"] == 10.0\n\n\ndef test_unknown_user(db):\n    assert get_user_orders(db, \"nobody\") == {\"orders\": [], \"total\": 0}\n\n\ndef test_injection_payload_is_not_executed(db):\n    result = get_user_orders(db, \"x' OR '1'='1\")\n    assert result[\"orders\"] == []  # currently FAILS: returns every order\n\n\ndef test_database_error_is_not_silenced(tmp_path):\n    with pytest.raises(sqlite3.Error):\n        get_user_orders(str(tmp_path / \"missing.db\"), \"u1\")  # currently returns []\n",
+     "cases": [
+      {
+       "name": "test_total_for_user",
+       "category": "nominal",
+       "description": "Sum for one user"
+      },
+      {
+       "name": "test_status_filter",
+       "category": "nominal",
+       "description": "Filter by status"
+      },
+      {
+       "name": "test_unknown_user",
+       "category": "edge",
+       "description": "No rows"
+      },
+      {
+       "name": "test_injection_payload_is_not_executed",
+       "category": "error",
+       "description": "Injection payload must not match rows"
+      },
+      {
+       "name": "test_database_error_is_not_silenced",
+       "category": "error",
+       "description": "DB errors must surface"
+      }
+     ],
+     "traces": [
+      {
+       "case": "test_total_for_user",
+       "trace": "Traced: sum for one user.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_status_filter",
+       "trace": "Traced: filter by status.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_unknown_user",
+       "trace": "Traced: no rows.",
+       "expected": "assertion holds",
+       "predicted": "assertion holds",
+       "passes": true
+      },
+      {
+       "case": "test_injection_payload_is_not_executed",
+       "trace": "user_id=\"x' OR '1'='1\" -> query becomes WHERE user_id = 'x' OR '1'='1' -> condition always true",
+       "expected": "no rows",
+       "predicted": "returns all 3 orders",
+       "passes": false
+      },
+      {
+       "case": "test_database_error_is_not_silenced",
+       "trace": "missing.db -> connect() creates an empty file -> execute() raises OperationalError (no such table) -> bare except sets rows=[]",
+       "expected": "raises sqlite3.Error",
+       "predicted": "returns {'orders': [], 'total': 0}, no exception",
+       "passes": false
+      }
+     ],
+     "validation": {
+      "passed": false,
+      "failing_cases": [
+       "test_injection_payload_is_not_executed",
+       "test_database_error_is_not_silenced"
+      ],
+      "issues": [
+       "The function opens its own connection: tests need a real file database (no injection of a connection).",
+       "Errors are swallowed, so failure modes cannot be asserted.",
+       "test_injection_payload_is_not_executed: expected no rows, but returns all 3 orders",
+       "test_database_error_is_not_silenced: expected raises sqlite3.Error, but returns {'orders': [], 'total': 0}, no exception"
+      ]
+     }
+    },
+    "test_results": {
+     "executed": false,
+     "method": "per-case code tracing by the Tester agent; verdict computed from the traces (tests not executed)",
+     "passed": false,
+     "failing_cases": [
+      "test_injection_payload_is_not_executed",
+      "test_database_error_is_not_silenced"
+     ],
+     "issues": [
+      "The function opens its own connection: tests need a real file database (no injection of a connection).",
+      "Errors are swallowed, so failure modes cannot be asserted.",
+      "test_injection_payload_is_not_executed: expected no rows, but returns all 3 orders",
+      "test_database_error_is_not_silenced: expected raises sqlite3.Error, but returns {'orders': [], 'total': 0}, no exception"
+     ],
+     "total_cases": 5
+    }
+   }
+  },
+  {
+   "seq": 20,
+   "workflow_id": "demo_code-review",
+   "type": "message",
+   "agent": "tester",
+   "t": 4.216,
+   "timestamp": "2026-11-14T13:04:54.922Z",
+   "data": {
+    "sender": "tester",
+    "receiver": "orchestrator",
+    "message_type": "test_report",
+    "content": "Hard to test in isolation; 2 of 5 key cases would fail today. [5 tests generated, not executed — traced: 2 case(s) expected to fail]",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 21,
+   "workflow_id": "demo_code-review",
+   "type": "parallel_joined",
+   "agent": "orchestrator",
+   "t": 4.217,
+   "timestamp": "2026-11-14T13:04:54.923Z",
+   "data": {
+    "agents": [
+     "analyzer",
+     "tester"
+    ]
+   }
+  },
+  {
+   "seq": 22,
+   "workflow_id": "demo_code-review",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 4.217,
+   "timestamp": "2026-11-14T13:04:54.923Z",
+   "data": {
+    "decision": "Hand off to Reviewer",
+    "reason": "Analyzer + Tester completed successfully.",
+    "kind": "dispatch",
+    "next": [
+     "reviewer"
+    ],
+    "iteration": 0
+   }
+  },
+  {
+   "seq": 23,
+   "workflow_id": "demo_code-review",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 4.217,
+   "timestamp": "2026-11-14T13:04:54.923Z",
+   "data": {
+    "calls": 3,
+    "input_tokens": 1959,
+    "output_tokens": 1200,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 24,
+   "workflow_id": "demo_code-review",
+   "type": "transition",
+   "agent": null,
+   "t": 4.217,
+   "timestamp": "2026-11-14T13:04:54.923Z",
+   "data": {
+    "source": "analyzer",
+    "target": "reviewer",
+    "kind": "join",
+    "label": "aggregate"
+   }
+  },
+  {
+   "seq": 25,
+   "workflow_id": "demo_code-review",
+   "type": "transition",
+   "agent": null,
+   "t": 4.217,
+   "timestamp": "2026-11-14T13:04:54.923Z",
+   "data": {
+    "source": "tester",
+    "target": "reviewer",
+    "kind": "join",
+    "label": "aggregate"
+   }
+  },
+  {
+   "seq": 26,
+   "workflow_id": "demo_code-review",
+   "type": "message",
+   "agent": "orchestrator",
+   "t": 4.217,
+   "timestamp": "2026-11-14T13:04:54.923Z",
+   "data": {
+    "sender": "orchestrator",
+    "receiver": "reviewer",
+    "message_type": "instruction",
+    "content": "Merge both reviews into a single prioritised verdict.",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 27,
+   "workflow_id": "demo_code-review",
+   "type": "message",
+   "agent": "analyzer",
+   "t": 4.217,
+   "timestamp": "2026-11-14T13:04:54.923Z",
+   "data": {
+    "sender": "analyzer",
+    "receiver": "reviewer",
+    "message_type": "analysis",
+    "content": "Critical SQL injection plus resource leak and silenced errors. 5 issue(s) found. Most severe: SQL injection (critical).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 28,
+   "workflow_id": "demo_code-review",
+   "type": "message",
+   "agent": "tester",
+   "t": 4.217,
+   "timestamp": "2026-11-14T13:04:54.924Z",
+   "data": {
+    "sender": "tester",
+    "receiver": "reviewer",
+    "message_type": "test_report",
+    "content": "Hard to test in isolation; 2 of 5 key cases would fail today. [5 tests generated, not executed — traced: 2 case(s) expected to fail]",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 29,
+   "workflow_id": "demo_code-review",
+   "type": "agent_started",
+   "agent": "reviewer",
+   "t": 4.218,
+   "timestamp": "2026-11-14T13:04:54.925Z",
+   "data": {
+    "iteration": 0,
+    "inputs": {
+     "deliverable": "the two independent reviews (quality by the Analyzer, testability by the Tester); merge them into one verdict. `approved` means production-ready as is",
+     "test_report": "Hard to test in isolation; 2 of 5 key cases would fail today."
+    },
+    "dispatch_id": 2
+   }
+  },
+  {
+   "seq": 30,
+   "workflow_id": "demo_code-review",
+   "type": "agent_completed",
+   "agent": "reviewer",
+   "t": 6.621,
+   "timestamp": "2026-11-14T13:04:57.328Z",
+   "data": {
+    "outcome": "rejected",
+    "duration_ms": 2402,
+    "iteration": 0,
+    "summary": "CHANGES REQUESTED — quality 3.5/10 (correctness 3, edge cases 3, robustness 2, readability 6). Changes requested: not production-ready (1 critical, 2 high).",
+    "output": {
+     "summary": "Changes requested: not production-ready (1 critical, 2 high).",
+     "approved": false,
+     "rubric": {
+      "correctness": 3,
+      "edge_cases": 3,
+      "robustness": 2,
+      "readability": 6
+     },
+     "findings": [
+      "Both reviews independently flag the error swallowing (Analyzer: bare except; Tester: unassertable failures).",
+      "SQL injection is confirmed by a concrete failing test case.",
+      "Design couples connection management, querying and aggregation."
+     ],
+     "required_changes": [
+      "Use parameterised queries for user_id and statuses (blocking).",
+      "Close the connection with a context manager (blocking).",
+      "Remove the bare except; let sqlite3.Error propagate or wrap it explicitly.",
+      "Accept a connection (or repository) parameter so the function can be unit-tested."
+     ],
+     "risks": [
+      "Data exfiltration via user_id",
+      "File-handle exhaustion under load",
+      "Silent incorrect totals"
+     ],
+     "score": 3.5
+    }
+   }
+  },
+  {
+   "seq": 31,
+   "workflow_id": "demo_code-review",
+   "type": "message",
+   "agent": "reviewer",
+   "t": 6.621,
+   "timestamp": "2026-11-14T13:04:57.328Z",
+   "data": {
+    "sender": "reviewer",
+    "receiver": "orchestrator",
+    "message_type": "review",
+    "content": "CHANGES REQUESTED — quality 3.5/10 (correctness 3, edge cases 3, robustness 2, readability 6). Changes requested: not production-ready (1 critical, 2 high).",
+    "payload": {}
+   }
+  },
+  {
+   "seq": 32,
+   "workflow_id": "demo_code-review",
+   "type": "decision",
+   "agent": "orchestrator",
+   "t": 6.622,
+   "timestamp": "2026-11-14T13:04:57.328Z",
+   "data": {
+    "decision": "Deliver review verdict",
+    "reason": "The review verdict is the deliverable: changes requested, nothing to rework here.",
+    "kind": "complete",
+    "next": [],
+    "iteration": 0
+   }
+  },
+  {
+   "seq": 33,
+   "workflow_id": "demo_code-review",
+   "type": "usage",
+   "agent": "orchestrator",
+   "t": 6.622,
+   "timestamp": "2026-11-14T13:04:57.328Z",
+   "data": {
+    "calls": 4,
+    "input_tokens": 2793,
+    "output_tokens": 1600,
+    "cost_usd": 0.0,
+    "max_cost_usd": 0.5
+   }
+  },
+  {
+   "seq": 34,
+   "workflow_id": "demo_code-review",
+   "type": "transition",
+   "agent": null,
+   "t": 6.622,
+   "timestamp": "2026-11-14T13:04:57.329Z",
+   "data": {
+    "source": "reviewer",
+    "target": "result",
+    "kind": "complete",
+    "label": ""
+   }
+  },
+  {
+   "seq": 35,
+   "workflow_id": "demo_code-review",
+   "type": "workflow_completed",
+   "agent": "orchestrator",
+   "t": 6.623,
+   "timestamp": "2026-11-14T13:04:57.329Z",
+   "data": {
+    "final_result": {
+     "status": "completed",
+     "reason": "The review verdict is the deliverable: changes requested, nothing to rework here.",
+     "task_type": "CODE_REVIEW",
+     "agents_used": [
+      "analyzer",
+      "tester",
+      "reviewer"
+     ],
+     "skipped_agents": [
+      "developer"
+     ],
+     "steps": 3,
+     "iterations": 0,
+     "original_code": "import sqlite3\n\n\ndef get_user_orders(db_path, user_id, statuses=[]):\n    conn = sqlite3.connect(db_path)\n    cursor = conn.cursor()\n    query = \"SELECT id, total, status FROM orders WHERE user_id = '%s'\" % user_id\n    if statuses:\n        query += \" AND status IN (%s)\" % \",\".join(\"'\" + s + \"'\" for s in statuses)\n    try:\n        rows = cursor.execute(query).fetchall()\n    except:\n        rows = []\n    total = 0\n    for r in rows:\n        total = total + r[1]\n    return {\"orders\": rows, \"total\": total}\n",
+     "final_code": null,
+     "test_code": "import sqlite3\n\nimport pytest\n\nfrom solution import get_user_orders\n\n\n@pytest.fixture\ndef db(tmp_path):\n    path = tmp_path / \"shop.db\"\n    conn = sqlite3.connect(path)\n    conn.execute(\"CREATE TABLE orders (id INTEGER, user_id TEXT, total REAL, status TEXT)\")\n    conn.executemany(\n        \"INSERT INTO orders VALUES (?, ?, ?, ?)\",\n        [(1, \"u1\", 10.0, \"paid\"), (2, \"u1\", 5.5, \"refunded\"), (3, \"u2\", 99.0, \"paid\")],\n    )\n    conn.commit()\n    conn.close()\n    return str(path)\n\n\ndef test_total_for_user(db):\n    assert get_user_orders(db, \"u1\")[\"total\"] == 15.5\n\n\ndef test_status_filter(db):\n    assert get_user_orders(db, \"u1\", [\"paid\"])[\"total\"] == 10.0\n\n\ndef test_unknown_user(db):\n    assert get_user_orders(db, \"nobody\") == {\"orders\": [], \"total\": 0}\n\n\ndef test_injection_payload_is_not_executed(db):\n    result = get_user_orders(db, \"x' OR '1'='1\")\n    assert result[\"orders\"] == []  # currently FAILS: returns every order\n\n\ndef test_database_error_is_not_silenced(tmp_path):\n    with pytest.raises(sqlite3.Error):\n        get_user_orders(str(tmp_path / \"missing.db\"), \"u1\")  # currently returns []\n",
+     "test_results": {
+      "executed": false,
+      "method": "per-case code tracing by the Tester agent; verdict computed from the traces (tests not executed)",
+      "passed": false,
+      "failing_cases": [
+       "test_injection_payload_is_not_executed",
+       "test_database_error_is_not_silenced"
+      ],
+      "issues": [
+       "The function opens its own connection: tests need a real file database (no injection of a connection).",
+       "Errors are swallowed, so failure modes cannot be asserted.",
+       "test_injection_payload_is_not_executed: expected no rows, but returns all 3 orders",
+       "test_database_error_is_not_silenced: expected raises sqlite3.Error, but returns {'orders': [], 'total': 0}, no exception"
+      ],
+      "total_cases": 5
+     },
+     "analysis": {
+      "summary": "Critical SQL injection plus resource leak and silenced errors.",
+      "issues": [
+       {
+        "title": "SQL injection",
+        "severity": "critical",
+        "line": 7,
+        "detail": "user_id and statuses are interpolated into SQL. Use ? placeholders."
+       },
+       {
+        "title": "Connection never closed",
+        "severity": "high",
+        "line": 5,
+        "detail": "sqlite3.connect without close/context manager leaks a handle per call."
+       },
+       {
+        "title": "Bare except hides failures",
+        "severity": "high",
+        "line": 12,
+        "detail": "Any error (missing table, locked DB) is reported as 'no orders'."
+       },
+       {
+        "title": "Mutable default argument",
+        "severity": "low",
+        "line": 4,
+        "detail": "statuses=[] is shared between calls; use None or a tuple."
+       },
+       {
+        "title": "Money summed as floats",
+        "severity": "medium",
+        "line": 16,
+        "detail": "Use integer cents or Decimal for monetary totals."
+       }
+      ],
+      "recommendations": [
+       "Parameterise the query, including a generated IN (?, ?, ...) list.",
+       "Use `with closing(sqlite3.connect(...))` and let database errors propagate.",
+       "Compute the total in SQL (SUM(total)) or with Decimal."
+      ]
+     },
+     "review": {
+      "summary": "Changes requested: not production-ready (1 critical, 2 high).",
+      "approved": false,
+      "rubric": {
+       "correctness": 3,
+       "edge_cases": 3,
+       "robustness": 2,
+       "readability": 6
+      },
+      "findings": [
+       "Both reviews independently flag the error swallowing (Analyzer: bare except; Tester: unassertable failures).",
+       "SQL injection is confirmed by a concrete failing test case.",
+       "Design couples connection management, querying and aggregation."
+      ],
+      "required_changes": [
+       "Use parameterised queries for user_id and statuses (blocking).",
+       "Close the connection with a context manager (blocking).",
+       "Remove the bare except; let sqlite3.Error propagate or wrap it explicitly.",
+       "Accept a connection (or repository) parameter so the function can be unit-tested."
+      ],
+      "risks": [
+       "Data exfiltration via user_id",
+       "File-handle exhaustion under load",
+       "Silent incorrect totals"
+      ],
+      "score": 3.5
+     },
+     "usage": {
+      "calls": 4,
+      "input_tokens": 2793,
+      "output_tokens": 1600,
+      "cost_usd": 0.0,
+      "max_cost_usd": 0.5
+     }
+    }
+   }
+  }
+ ]
+}
