@@ -14,13 +14,13 @@
   "request": "Review this function before it goes to production: quality, risks and testability."
  },
  "recording": {
-  "recorded_at": "2026-11-14T13:04:57+00:00",
+  "recorded_at": "2026-11-15T20:52:32+00:00",
   "engine": "LangGraph (backend/app/orchestration/graph.py)",
   "provider": "mock",
   "model": "scripted-demo-model",
   "simulated": true,
   "status": "completed",
-  "duration_s": 6.623
+  "duration_s": 6.631
  },
  "events": [
   {
@@ -29,7 +29,7 @@
    "type": "workflow_started",
    "agent": "orchestrator",
    "t": 0.0,
-   "timestamp": "2026-11-14T13:04:50.707Z",
+   "timestamp": "2026-11-15T20:52:26.080Z",
    "data": {
     "mode": "demo-recording",
     "provider": "mock",
@@ -51,21 +51,33 @@
   {
    "seq": 2,
    "workflow_id": "demo_code-review",
-   "type": "agent_started",
+   "type": "node_entered",
    "agent": "orchestrator",
-   "t": 0.001,
-   "timestamp": "2026-11-14T13:04:50.708Z",
+   "t": 0.002,
+   "timestamp": "2026-11-15T20:52:26.082Z",
    "data": {
-    "phase": "planning"
+    "node": "orchestrator",
+    "step": 1
    }
   },
   {
    "seq": 3,
    "workflow_id": "demo_code-review",
+   "type": "agent_started",
+   "agent": "orchestrator",
+   "t": 0.002,
+   "timestamp": "2026-11-15T20:52:26.082Z",
+   "data": {
+    "phase": "planning"
+   }
+  },
+  {
+   "seq": 4,
+   "workflow_id": "demo_code-review",
    "type": "tool_result",
    "agent": "tools",
-   "t": 0.003,
-   "timestamp": "2026-11-14T13:04:50.710Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:26.085Z",
    "data": {
     "tool": "static_analysis",
     "report": {
@@ -115,12 +127,12 @@
    }
   },
   {
-   "seq": 4,
+   "seq": 5,
    "workflow_id": "demo_code-review",
    "type": "task_classified",
    "agent": "orchestrator",
-   "t": 0.003,
-   "timestamp": "2026-11-14T13:04:50.710Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:26.085Z",
    "data": {
     "task_type": "CODE_REVIEW",
     "confidence": 1.0,
@@ -128,12 +140,12 @@
    }
   },
   {
-   "seq": 5,
+   "seq": 6,
    "workflow_id": "demo_code-review",
    "type": "plan_created",
    "agent": "orchestrator",
-   "t": 0.003,
-   "timestamp": "2026-11-14T13:04:50.710Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:26.085Z",
    "data": {
     "task_type": "CODE_REVIEW",
     "stages": [
@@ -163,12 +175,12 @@
    }
   },
   {
-   "seq": 6,
+   "seq": 7,
    "workflow_id": "demo_code-review",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 0.003,
-   "timestamp": "2026-11-14T13:04:50.710Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:26.085Z",
    "data": {
     "decision": "Select Analyzer, Tester, Reviewer",
     "reason": "Quality and testability are independent questions: run both in parallel, then merge. Skipped: Developer.",
@@ -181,12 +193,12 @@
    }
   },
   {
-   "seq": 7,
+   "seq": 8,
    "workflow_id": "demo_code-review",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:50.710Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:26.085Z",
    "data": {
     "decision": "Run Analyzer + Tester in parallel",
     "reason": "These tasks are independent, so they run concurrently.",
@@ -198,12 +210,12 @@
    }
   },
   {
-   "seq": 8,
+   "seq": 9,
    "workflow_id": "demo_code-review",
    "type": "message",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:50.710Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:26.085Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "analyzer",
@@ -213,12 +225,12 @@
    }
   },
   {
-   "seq": 9,
+   "seq": 10,
    "workflow_id": "demo_code-review",
    "type": "message",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:50.710Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:52:26.086Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "tester",
@@ -228,12 +240,12 @@
    }
   },
   {
-   "seq": 10,
+   "seq": 11,
    "workflow_id": "demo_code-review",
    "type": "message",
    "agent": "tools",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:50.711Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:52:26.086Z",
    "data": {
     "sender": "tools",
     "receiver": "analyzer",
@@ -243,12 +255,12 @@
    }
   },
   {
-   "seq": 11,
+   "seq": 12,
    "workflow_id": "demo_code-review",
    "type": "transition",
    "agent": null,
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:50.711Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:52:26.086Z",
    "data": {
     "source": "orchestrator",
     "target": "analyzer",
@@ -257,12 +269,12 @@
    }
   },
   {
-   "seq": 12,
+   "seq": 13,
    "workflow_id": "demo_code-review",
    "type": "transition",
    "agent": null,
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:50.711Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:52:26.086Z",
    "data": {
     "source": "orchestrator",
     "target": "tester",
@@ -271,12 +283,12 @@
    }
   },
   {
-   "seq": 13,
+   "seq": 14,
    "workflow_id": "demo_code-review",
    "type": "parallel_started",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:50.711Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:52:26.086Z",
    "data": {
     "agents": [
      "analyzer",
@@ -285,24 +297,63 @@
    }
   },
   {
-   "seq": 14,
+   "seq": 15,
    "workflow_id": "demo_code-review",
    "type": "agent_completed",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:50.711Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:52:26.086Z",
    "data": {
     "phase": "planning",
     "outcome": "success"
    }
   },
   {
-   "seq": 15,
+   "seq": 16,
+   "workflow_id": "demo_code-review",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:52:26.086Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 1,
+    "updated_keys": [
+     "dispatch_id",
+     "next_agents",
+     "selected_agents",
+     "stage_index",
+     "stages",
+     "static_checks",
+     "status",
+     "subtasks",
+     "task_type"
+    ],
+    "routes_to": [
+     "analyzer",
+     "tester"
+    ]
+   }
+  },
+  {
+   "seq": 17,
+   "workflow_id": "demo_code-review",
+   "type": "node_entered",
+   "agent": "analyzer",
+   "t": 0.008,
+   "timestamp": "2026-11-15T20:52:26.088Z",
+   "data": {
+    "node": "analyzer",
+    "step": 2
+   }
+  },
+  {
+   "seq": 18,
    "workflow_id": "demo_code-review",
    "type": "agent_started",
    "agent": "analyzer",
-   "t": 0.006,
-   "timestamp": "2026-11-14T13:04:50.712Z",
+   "t": 0.008,
+   "timestamp": "2026-11-15T20:52:26.088Z",
    "data": {
     "iteration": 0,
     "inputs": {
@@ -315,12 +366,24 @@
    }
   },
   {
-   "seq": 16,
+   "seq": 19,
+   "workflow_id": "demo_code-review",
+   "type": "node_entered",
+   "agent": "tester",
+   "t": 0.008,
+   "timestamp": "2026-11-15T20:52:26.088Z",
+   "data": {
+    "node": "tester",
+    "step": 2
+   }
+  },
+  {
+   "seq": 20,
    "workflow_id": "demo_code-review",
    "type": "agent_started",
    "agent": "tester",
-   "t": 0.007,
-   "timestamp": "2026-11-14T13:04:50.714Z",
+   "t": 0.01,
+   "timestamp": "2026-11-15T20:52:26.090Z",
    "data": {
     "iteration": 0,
     "inputs": {
@@ -331,12 +394,12 @@
    }
   },
   {
-   "seq": 17,
+   "seq": 21,
    "workflow_id": "demo_code-review",
    "type": "agent_completed",
    "agent": "analyzer",
-   "t": 2.607,
-   "timestamp": "2026-11-14T13:04:53.314Z",
+   "t": 2.61,
+   "timestamp": "2026-11-15T20:52:28.690Z",
    "data": {
     "outcome": "success",
     "duration_ms": 2601,
@@ -385,12 +448,12 @@
    }
   },
   {
-   "seq": 18,
+   "seq": 22,
    "workflow_id": "demo_code-review",
    "type": "message",
    "agent": "analyzer",
-   "t": 2.607,
-   "timestamp": "2026-11-14T13:04:53.314Z",
+   "t": 2.61,
+   "timestamp": "2026-11-15T20:52:28.690Z",
    "data": {
     "sender": "analyzer",
     "receiver": "orchestrator",
@@ -400,15 +463,31 @@
    }
   },
   {
-   "seq": 19,
+   "seq": 23,
+   "workflow_id": "demo_code-review",
+   "type": "node_exited",
+   "agent": "analyzer",
+   "t": 2.61,
+   "timestamp": "2026-11-15T20:52:28.690Z",
+   "data": {
+    "node": "analyzer",
+    "step": 2,
+    "updated_keys": [
+     "agent_outputs",
+     "completed_steps"
+    ]
+   }
+  },
+  {
+   "seq": 24,
    "workflow_id": "demo_code-review",
    "type": "agent_completed",
    "agent": "tester",
-   "t": 4.216,
-   "timestamp": "2026-11-14T13:04:54.922Z",
+   "t": 4.222,
+   "timestamp": "2026-11-15T20:52:30.302Z",
    "data": {
     "outcome": "success",
-    "duration_ms": 4208,
+    "duration_ms": 4211,
     "iteration": 0,
     "summary": "Hard to test in isolation; 2 of 5 key cases would fail today. [5 tests generated, not executed — traced: 2 case(s) expected to fail]",
     "output": {
@@ -511,12 +590,12 @@
    }
   },
   {
-   "seq": 20,
+   "seq": 25,
    "workflow_id": "demo_code-review",
    "type": "message",
    "agent": "tester",
-   "t": 4.216,
-   "timestamp": "2026-11-14T13:04:54.922Z",
+   "t": 4.222,
+   "timestamp": "2026-11-15T20:52:30.302Z",
    "data": {
     "sender": "tester",
     "receiver": "orchestrator",
@@ -526,12 +605,42 @@
    }
   },
   {
-   "seq": 21,
+   "seq": 26,
+   "workflow_id": "demo_code-review",
+   "type": "node_exited",
+   "agent": "tester",
+   "t": 4.222,
+   "timestamp": "2026-11-15T20:52:30.302Z",
+   "data": {
+    "node": "tester",
+    "step": 2,
+    "updated_keys": [
+     "agent_outputs",
+     "completed_steps",
+     "test_code",
+     "test_results"
+    ]
+   }
+  },
+  {
+   "seq": 27,
+   "workflow_id": "demo_code-review",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 4.224,
+   "timestamp": "2026-11-15T20:52:30.304Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 3
+   }
+  },
+  {
+   "seq": 28,
    "workflow_id": "demo_code-review",
    "type": "parallel_joined",
    "agent": "orchestrator",
-   "t": 4.217,
-   "timestamp": "2026-11-14T13:04:54.923Z",
+   "t": 4.224,
+   "timestamp": "2026-11-15T20:52:30.304Z",
    "data": {
     "agents": [
      "analyzer",
@@ -540,12 +649,12 @@
    }
   },
   {
-   "seq": 22,
+   "seq": 29,
    "workflow_id": "demo_code-review",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 4.217,
-   "timestamp": "2026-11-14T13:04:54.923Z",
+   "t": 4.224,
+   "timestamp": "2026-11-15T20:52:30.304Z",
    "data": {
     "decision": "Hand off to Reviewer",
     "reason": "Analyzer + Tester completed successfully.",
@@ -557,12 +666,12 @@
    }
   },
   {
-   "seq": 23,
+   "seq": 30,
    "workflow_id": "demo_code-review",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 4.217,
-   "timestamp": "2026-11-14T13:04:54.923Z",
+   "t": 4.224,
+   "timestamp": "2026-11-15T20:52:30.304Z",
    "data": {
     "calls": 3,
     "input_tokens": 1959,
@@ -572,12 +681,12 @@
    }
   },
   {
-   "seq": 24,
+   "seq": 31,
    "workflow_id": "demo_code-review",
    "type": "transition",
    "agent": null,
-   "t": 4.217,
-   "timestamp": "2026-11-14T13:04:54.923Z",
+   "t": 4.224,
+   "timestamp": "2026-11-15T20:52:30.304Z",
    "data": {
     "source": "analyzer",
     "target": "reviewer",
@@ -586,12 +695,12 @@
    }
   },
   {
-   "seq": 25,
+   "seq": 32,
    "workflow_id": "demo_code-review",
    "type": "transition",
    "agent": null,
-   "t": 4.217,
-   "timestamp": "2026-11-14T13:04:54.923Z",
+   "t": 4.224,
+   "timestamp": "2026-11-15T20:52:30.304Z",
    "data": {
     "source": "tester",
     "target": "reviewer",
@@ -600,12 +709,12 @@
    }
   },
   {
-   "seq": 26,
+   "seq": 33,
    "workflow_id": "demo_code-review",
    "type": "message",
    "agent": "orchestrator",
-   "t": 4.217,
-   "timestamp": "2026-11-14T13:04:54.923Z",
+   "t": 4.224,
+   "timestamp": "2026-11-15T20:52:30.304Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "reviewer",
@@ -615,12 +724,12 @@
    }
   },
   {
-   "seq": 27,
+   "seq": 34,
    "workflow_id": "demo_code-review",
    "type": "message",
    "agent": "analyzer",
-   "t": 4.217,
-   "timestamp": "2026-11-14T13:04:54.923Z",
+   "t": 4.224,
+   "timestamp": "2026-11-15T20:52:30.304Z",
    "data": {
     "sender": "analyzer",
     "receiver": "reviewer",
@@ -630,12 +739,12 @@
    }
   },
   {
-   "seq": 28,
+   "seq": 35,
    "workflow_id": "demo_code-review",
    "type": "message",
    "agent": "tester",
-   "t": 4.217,
-   "timestamp": "2026-11-14T13:04:54.924Z",
+   "t": 4.224,
+   "timestamp": "2026-11-15T20:52:30.304Z",
    "data": {
     "sender": "tester",
     "receiver": "reviewer",
@@ -645,12 +754,45 @@
    }
   },
   {
-   "seq": 29,
+   "seq": 36,
+   "workflow_id": "demo_code-review",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 4.224,
+   "timestamp": "2026-11-15T20:52:30.304Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 3,
+    "updated_keys": [
+     "dispatch_id",
+     "iteration_count",
+     "next_agents",
+     "stage_index"
+    ],
+    "routes_to": [
+     "reviewer"
+    ]
+   }
+  },
+  {
+   "seq": 37,
+   "workflow_id": "demo_code-review",
+   "type": "node_entered",
+   "agent": "reviewer",
+   "t": 4.225,
+   "timestamp": "2026-11-15T20:52:30.305Z",
+   "data": {
+    "node": "reviewer",
+    "step": 4
+   }
+  },
+  {
+   "seq": 38,
    "workflow_id": "demo_code-review",
    "type": "agent_started",
    "agent": "reviewer",
-   "t": 4.218,
-   "timestamp": "2026-11-14T13:04:54.925Z",
+   "t": 4.225,
+   "timestamp": "2026-11-15T20:52:30.305Z",
    "data": {
     "iteration": 0,
     "inputs": {
@@ -661,15 +803,15 @@
    }
   },
   {
-   "seq": 30,
+   "seq": 39,
    "workflow_id": "demo_code-review",
    "type": "agent_completed",
    "agent": "reviewer",
-   "t": 6.621,
-   "timestamp": "2026-11-14T13:04:57.328Z",
+   "t": 6.628,
+   "timestamp": "2026-11-15T20:52:32.708Z",
    "data": {
     "outcome": "rejected",
-    "duration_ms": 2402,
+    "duration_ms": 2403,
     "iteration": 0,
     "summary": "CHANGES REQUESTED — quality 3.5/10 (correctness 3, edge cases 3, robustness 2, readability 6). Changes requested: not production-ready (1 critical, 2 high).",
     "output": {
@@ -702,12 +844,12 @@
    }
   },
   {
-   "seq": 31,
+   "seq": 40,
    "workflow_id": "demo_code-review",
    "type": "message",
    "agent": "reviewer",
-   "t": 6.621,
-   "timestamp": "2026-11-14T13:04:57.328Z",
+   "t": 6.628,
+   "timestamp": "2026-11-15T20:52:32.708Z",
    "data": {
     "sender": "reviewer",
     "receiver": "orchestrator",
@@ -717,12 +859,41 @@
    }
   },
   {
-   "seq": 32,
+   "seq": 41,
+   "workflow_id": "demo_code-review",
+   "type": "node_exited",
+   "agent": "reviewer",
+   "t": 6.628,
+   "timestamp": "2026-11-15T20:52:32.708Z",
+   "data": {
+    "node": "reviewer",
+    "step": 4,
+    "updated_keys": [
+     "agent_outputs",
+     "completed_steps",
+     "review_feedback"
+    ]
+   }
+  },
+  {
+   "seq": 42,
+   "workflow_id": "demo_code-review",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 6.63,
+   "timestamp": "2026-11-15T20:52:32.710Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 5
+   }
+  },
+  {
+   "seq": 43,
    "workflow_id": "demo_code-review",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 6.622,
-   "timestamp": "2026-11-14T13:04:57.328Z",
+   "t": 6.63,
+   "timestamp": "2026-11-15T20:52:32.710Z",
    "data": {
     "decision": "Deliver review verdict",
     "reason": "The review verdict is the deliverable: changes requested, nothing to rework here.",
@@ -732,12 +903,12 @@
    }
   },
   {
-   "seq": 33,
+   "seq": 44,
    "workflow_id": "demo_code-review",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 6.622,
-   "timestamp": "2026-11-14T13:04:57.328Z",
+   "t": 6.63,
+   "timestamp": "2026-11-15T20:52:32.710Z",
    "data": {
     "calls": 4,
     "input_tokens": 2793,
@@ -747,12 +918,12 @@
    }
   },
   {
-   "seq": 34,
+   "seq": 45,
    "workflow_id": "demo_code-review",
    "type": "transition",
    "agent": null,
-   "t": 6.622,
-   "timestamp": "2026-11-14T13:04:57.329Z",
+   "t": 6.63,
+   "timestamp": "2026-11-15T20:52:32.710Z",
    "data": {
     "source": "reviewer",
     "target": "result",
@@ -761,12 +932,33 @@
    }
   },
   {
-   "seq": 35,
+   "seq": 46,
+   "workflow_id": "demo_code-review",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 6.63,
+   "timestamp": "2026-11-15T20:52:32.710Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 5,
+    "updated_keys": [
+     "final_result",
+     "iteration_count",
+     "next_agents",
+     "status"
+    ],
+    "routes_to": [
+     "__end__"
+    ]
+   }
+  },
+  {
+   "seq": 47,
    "workflow_id": "demo_code-review",
    "type": "workflow_completed",
    "agent": "orchestrator",
-   "t": 6.623,
-   "timestamp": "2026-11-14T13:04:57.329Z",
+   "t": 6.631,
+   "timestamp": "2026-11-15T20:52:32.711Z",
    "data": {
     "final_result": {
      "status": "completed",

@@ -25,6 +25,8 @@ export type EventType =
   | 'workflow_completed'
   | 'workflow_failed'
   | 'workflow_cancelled'
+  | 'node_entered'
+  | 'node_exited'
 
 export interface WorkflowEvent {
   seq: number

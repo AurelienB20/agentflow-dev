@@ -12,6 +12,7 @@ development tasks. It focuses on what makes a system *multi-agent* rather than a
 | **Conditional transitions and self-correction** | *Fix a Bug*: Tester rejects the first patch → back to the Developer |
 | **Inter-agent communication** (structured messages) | *Agent Messages* tab |
 | **Explained decisions** | *Orchestrator Decisions* tab: every routing choice with its reason |
+| **The real LangGraph, live** | *LangGraph view* toggle: the compiled graph (START, orchestrator, agents, END), the node running now lit, each super-step listed with the state keys it wrote |
 | **Supervision and limits** | iteration cap (3), error retry, timeout, per-workflow LLM budget |
 
 Open the page, pick a mission, press **Launch Agents**. No sign-up, no API key, works on a phone.

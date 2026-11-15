@@ -49,6 +49,13 @@ async def test_scenarios_and_agents(client):
     assert [a["id"] for a in agents] == ["orchestrator", "analyzer", "developer", "tester", "reviewer"]
 
 
+async def test_graph_topology_endpoint(client):
+    g = (await client.get("/api/graph")).json()
+    assert g["nodes"][0] == "__start__" and g["nodes"][-1] == "__end__"
+    conditional = {e["target"] for e in g["edges"] if e["source"] == "orchestrator" and e["conditional"]}
+    assert conditional == {"analyzer", "developer", "tester", "reviewer", "__end__"}
+
+
 async def test_live_mode_unavailable_returns_503(client, live_off):
     r = await client.post("/api/workflows", json=body())
     assert r.status_code == 503

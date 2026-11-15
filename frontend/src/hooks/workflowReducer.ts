@@ -44,6 +44,16 @@ export interface LogEntry {
   isDecision: boolean
 }
 
+// One LangGraph node execution, from the backend's node_entered / node_exited events.
+export interface NodeVisit {
+  step: number
+  node: string
+  running: boolean
+  t: number
+  updatedKeys: string[]
+  routesTo: string[]
+}
+
 export interface RunState {
   phase: Phase
   mode: Mode | null
@@ -70,6 +80,7 @@ export interface RunState {
   error: string | null
   elapsed: number
   eventCount: number
+  trace: NodeVisit[]
 }
 
 const AGENT_IDS: AgentId[] = ['orchestrator', 'analyzer', 'developer', 'tester', 'reviewer']
@@ -114,6 +125,7 @@ export const initialRunState = (): RunState => ({
   error: null,
   elapsed: 0,
   eventCount: 0,
+  trace: [],
 })
 
 const name = (id: string) => (id === 'result' ? 'Result' : id.charAt(0).toUpperCase() + id.slice(1))
@@ -323,6 +335,16 @@ export function applyEvent(prev: RunState, e: WorkflowEvent): RunState {
       s.agents = patchAgent(s, 'orchestrator', { status: 'failed' })
       s.resultStatus = 'failed'
       log({ kind: 'error', title: 'Workflow failed', detail: d.error, isDecision: false, agent: 'orchestrator' })
+      break
+
+    case 'node_entered':
+      s.trace = [...s.trace, { step: d.step, node: d.node, running: true, t: e.t, updatedKeys: [], routesTo: [] }]
+      break
+
+    case 'node_exited':
+      s.trace = s.trace.map((v) =>
+        v.node === d.node && v.step === d.step ? { ...v, running: false, updatedKeys: d.updated_keys ?? [], routesTo: d.routes_to ?? [] } : v,
+      )
       break
 
     case 'workflow_cancelled':

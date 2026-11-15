@@ -1,0 +1,63 @@
+{
+ "nodes": [
+  "__start__",
+  "orchestrator",
+  "analyzer",
+  "developer",
+  "tester",
+  "reviewer",
+  "__end__"
+ ],
+ "edges": [
+  {
+   "source": "__start__",
+   "target": "orchestrator",
+   "conditional": false
+  },
+  {
+   "source": "analyzer",
+   "target": "orchestrator",
+   "conditional": false
+  },
+  {
+   "source": "developer",
+   "target": "orchestrator",
+   "conditional": false
+  },
+  {
+   "source": "orchestrator",
+   "target": "__end__",
+   "conditional": true
+  },
+  {
+   "source": "orchestrator",
+   "target": "analyzer",
+   "conditional": true
+  },
+  {
+   "source": "orchestrator",
+   "target": "developer",
+   "conditional": true
+  },
+  {
+   "source": "orchestrator",
+   "target": "reviewer",
+   "conditional": true
+  },
+  {
+   "source": "orchestrator",
+   "target": "tester",
+   "conditional": true
+  },
+  {
+   "source": "reviewer",
+   "target": "orchestrator",
+   "conditional": false
+  },
+  {
+   "source": "tester",
+   "target": "orchestrator",
+   "conditional": false
+  }
+ ]
+}

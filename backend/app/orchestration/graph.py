@@ -304,11 +304,42 @@ def route_after_orchestrator(state: AgentState) -> list[str] | str:
     return nxt if nxt else END
 
 
+def traced(name: str, fn):
+    """Wrap a node so the UI can show the LangGraph execution itself: which node is active, in
+    which super-step (LangGraph's own ``langgraph_step`` counter), which state keys it wrote and,
+    for the orchestrator, where the conditional edge sends the run next."""
+
+    async def node(state: AgentState, config: RunnableConfig) -> dict[str, Any]:
+        run = _ctx(config).run
+        step = (config.get("metadata") or {}).get("langgraph_step")
+        run.emit("node_entered", agent=name, node=name, step=step)
+        update = await fn(state, config)
+        exited: dict[str, Any] = {"node": name, "step": step, "updated_keys": sorted(update or {})}
+        if name == "orchestrator":
+            route = route_after_orchestrator({**state, **(update or {})})
+            exited["routes_to"] = route if isinstance(route, list) else [route]
+        run.emit("node_exited", agent=name, **exited)
+        return update
+
+    node.__name__ = getattr(fn, "__name__", name)
+    return node
+
+
+def topology(graph=None) -> dict[str, Any]:
+    """Nodes and edges of the compiled graph, as LangGraph itself reports them."""
+    g = (graph or compiled_graph).get_graph()
+    return {
+        "nodes": list(g.nodes),
+        "edges": sorted(({"source": e.source, "target": e.target, "conditional": bool(e.conditional)}
+                         for e in g.edges), key=lambda e: (e["source"], e["target"])),
+    }
+
+
 def build_graph():
     graph = StateGraph(AgentState)
-    graph.add_node("orchestrator", orchestrator_node)
+    graph.add_node("orchestrator", traced("orchestrator", orchestrator_node))
     for agent_id in AGENTS:
-        graph.add_node(agent_id, make_agent_node(agent_id))
+        graph.add_node(agent_id, traced(agent_id, make_agent_node(agent_id)))
         graph.add_edge(agent_id, "orchestrator")
     graph.add_edge(START, "orchestrator")
     graph.add_conditional_edges("orchestrator", route_after_orchestrator, [*AGENTS.keys(), END])

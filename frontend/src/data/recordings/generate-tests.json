@@ -14,13 +14,13 @@
   "request": "Generate a pytest suite for slugify covering nominal behaviour, edge cases and errors."
  },
  "recording": {
-  "recorded_at": "2026-11-14T13:04:50+00:00",
+  "recorded_at": "2026-11-15T20:52:26+00:00",
   "engine": "LangGraph (backend/app/orchestration/graph.py)",
   "provider": "mock",
   "model": "scripted-demo-model",
   "simulated": true,
   "status": "completed",
-  "duration_s": 15.846
+  "duration_s": 15.864
  },
  "events": [
   {
@@ -29,7 +29,7 @@
    "type": "workflow_started",
    "agent": "orchestrator",
    "t": 0.0,
-   "timestamp": "2026-11-14T13:04:34.857Z",
+   "timestamp": "2026-11-15T20:52:10.209Z",
    "data": {
     "mode": "demo-recording",
     "provider": "mock",
@@ -51,21 +51,33 @@
   {
    "seq": 2,
    "workflow_id": "demo_generate-tests",
-   "type": "agent_started",
+   "type": "node_entered",
    "agent": "orchestrator",
    "t": 0.003,
-   "timestamp": "2026-11-14T13:04:34.859Z",
+   "timestamp": "2026-11-15T20:52:10.212Z",
    "data": {
-    "phase": "planning"
+    "node": "orchestrator",
+    "step": 1
    }
   },
   {
    "seq": 3,
    "workflow_id": "demo_generate-tests",
+   "type": "agent_started",
+   "agent": "orchestrator",
+   "t": 0.003,
+   "timestamp": "2026-11-15T20:52:10.212Z",
+   "data": {
+    "phase": "planning"
+   }
+  },
+  {
+   "seq": 4,
+   "workflow_id": "demo_generate-tests",
    "type": "tool_result",
    "agent": "tools",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:34.860Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:10.215Z",
    "data": {
     "tool": "static_analysis",
     "report": {
@@ -89,12 +101,12 @@
    }
   },
   {
-   "seq": 4,
+   "seq": 5,
    "workflow_id": "demo_generate-tests",
    "type": "task_classified",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:34.860Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:10.215Z",
    "data": {
     "task_type": "TEST_GEN",
     "confidence": 1.0,
@@ -102,12 +114,12 @@
    }
   },
   {
-   "seq": 5,
+   "seq": 6,
    "workflow_id": "demo_generate-tests",
    "type": "plan_created",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:34.860Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:10.215Z",
    "data": {
     "task_type": "TEST_GEN",
     "stages": [
@@ -139,12 +151,12 @@
    }
   },
   {
-   "seq": 6,
+   "seq": 7,
    "workflow_id": "demo_generate-tests",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:34.860Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:10.215Z",
    "data": {
     "decision": "Select Analyzer, Tester, Reviewer",
     "reason": "No code change is requested, so the Developer is skipped; tests are written and reviewed. Skipped: Developer.",
@@ -157,12 +169,12 @@
    }
   },
   {
-   "seq": 7,
+   "seq": 8,
    "workflow_id": "demo_generate-tests",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:34.860Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:10.215Z",
    "data": {
     "decision": "Start with Analyzer",
     "reason": "The first stage of the plan needs no prior input.",
@@ -173,12 +185,12 @@
    }
   },
   {
-   "seq": 8,
+   "seq": 9,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:34.861Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:52:10.215Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "analyzer",
@@ -188,12 +200,12 @@
    }
   },
   {
-   "seq": 9,
+   "seq": 10,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "tools",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:34.861Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:52:10.215Z",
    "data": {
     "sender": "tools",
     "receiver": "analyzer",
@@ -203,12 +215,12 @@
    }
   },
   {
-   "seq": 10,
+   "seq": 11,
    "workflow_id": "demo_generate-tests",
    "type": "transition",
    "agent": null,
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:34.861Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:52:10.215Z",
    "data": {
     "source": "orchestrator",
     "target": "analyzer",
@@ -217,24 +229,62 @@
    }
   },
   {
-   "seq": 11,
+   "seq": 12,
    "workflow_id": "demo_generate-tests",
    "type": "agent_completed",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:34.861Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:52:10.215Z",
    "data": {
     "phase": "planning",
     "outcome": "success"
    }
   },
   {
-   "seq": 12,
+   "seq": 13,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:52:10.215Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 1,
+    "updated_keys": [
+     "dispatch_id",
+     "next_agents",
+     "selected_agents",
+     "stage_index",
+     "stages",
+     "static_checks",
+     "status",
+     "subtasks",
+     "task_type"
+    ],
+    "routes_to": [
+     "analyzer"
+    ]
+   }
+  },
+  {
+   "seq": 14,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_entered",
+   "agent": "analyzer",
+   "t": 0.008,
+   "timestamp": "2026-11-15T20:52:10.218Z",
+   "data": {
+    "node": "analyzer",
+    "step": 2
+   }
+  },
+  {
+   "seq": 15,
    "workflow_id": "demo_generate-tests",
    "type": "agent_started",
    "agent": "analyzer",
-   "t": 0.006,
-   "timestamp": "2026-11-14T13:04:34.862Z",
+   "t": 0.008,
+   "timestamp": "2026-11-15T20:52:10.218Z",
    "data": {
     "iteration": 0,
     "inputs": {
@@ -247,12 +297,12 @@
    }
   },
   {
-   "seq": 13,
+   "seq": 16,
    "workflow_id": "demo_generate-tests",
    "type": "agent_completed",
    "agent": "analyzer",
-   "t": 2.609,
-   "timestamp": "2026-11-14T13:04:37.465Z",
+   "t": 2.611,
+   "timestamp": "2026-11-15T20:52:12.821Z",
    "data": {
     "outcome": "success",
     "duration_ms": 2603,
@@ -294,12 +344,12 @@
    }
   },
   {
-   "seq": 14,
+   "seq": 17,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "analyzer",
-   "t": 2.609,
-   "timestamp": "2026-11-14T13:04:37.465Z",
+   "t": 2.611,
+   "timestamp": "2026-11-15T20:52:12.821Z",
    "data": {
     "sender": "analyzer",
     "receiver": "orchestrator",
@@ -309,12 +359,40 @@
    }
   },
   {
-   "seq": 15,
+   "seq": 18,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_exited",
+   "agent": "analyzer",
+   "t": 2.611,
+   "timestamp": "2026-11-15T20:52:12.821Z",
+   "data": {
+    "node": "analyzer",
+    "step": 2,
+    "updated_keys": [
+     "agent_outputs",
+     "completed_steps"
+    ]
+   }
+  },
+  {
+   "seq": 19,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 2.613,
+   "timestamp": "2026-11-15T20:52:12.822Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 3
+   }
+  },
+  {
+   "seq": 20,
    "workflow_id": "demo_generate-tests",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 2.61,
-   "timestamp": "2026-11-14T13:04:37.466Z",
+   "t": 2.613,
+   "timestamp": "2026-11-15T20:52:12.822Z",
    "data": {
     "decision": "Hand off to Tester",
     "reason": "Analyzer completed successfully.",
@@ -326,12 +404,12 @@
    }
   },
   {
-   "seq": 16,
+   "seq": 21,
    "workflow_id": "demo_generate-tests",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 2.61,
-   "timestamp": "2026-11-14T13:04:37.466Z",
+   "t": 2.613,
+   "timestamp": "2026-11-15T20:52:12.822Z",
    "data": {
     "calls": 1,
     "input_tokens": 410,
@@ -341,12 +419,12 @@
    }
   },
   {
-   "seq": 17,
+   "seq": 22,
    "workflow_id": "demo_generate-tests",
    "type": "transition",
    "agent": null,
-   "t": 2.61,
-   "timestamp": "2026-11-14T13:04:37.466Z",
+   "t": 2.613,
+   "timestamp": "2026-11-15T20:52:12.822Z",
    "data": {
     "source": "analyzer",
     "target": "tester",
@@ -355,12 +433,12 @@
    }
   },
   {
-   "seq": 18,
+   "seq": 23,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "orchestrator",
-   "t": 2.61,
-   "timestamp": "2026-11-14T13:04:37.466Z",
+   "t": 2.613,
+   "timestamp": "2026-11-15T20:52:12.822Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "tester",
@@ -370,12 +448,12 @@
    }
   },
   {
-   "seq": 19,
+   "seq": 24,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "analyzer",
-   "t": 2.61,
-   "timestamp": "2026-11-14T13:04:37.466Z",
+   "t": 2.613,
+   "timestamp": "2026-11-15T20:52:12.822Z",
    "data": {
     "sender": "analyzer",
     "receiver": "tester",
@@ -385,12 +463,45 @@
    }
   },
   {
-   "seq": 20,
+   "seq": 25,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 2.613,
+   "timestamp": "2026-11-15T20:52:12.822Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 3,
+    "updated_keys": [
+     "dispatch_id",
+     "iteration_count",
+     "next_agents",
+     "stage_index"
+    ],
+    "routes_to": [
+     "tester"
+    ]
+   }
+  },
+  {
+   "seq": 26,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_entered",
+   "agent": "tester",
+   "t": 2.614,
+   "timestamp": "2026-11-15T20:52:12.824Z",
+   "data": {
+    "node": "tester",
+    "step": 4
+   }
+  },
+  {
+   "seq": 27,
    "workflow_id": "demo_generate-tests",
    "type": "agent_started",
    "agent": "tester",
-   "t": 2.612,
-   "timestamp": "2026-11-14T13:04:37.469Z",
+   "t": 2.617,
+   "timestamp": "2026-11-15T20:52:12.827Z",
    "data": {
     "iteration": 0,
     "inputs": {
@@ -402,15 +513,15 @@
    }
   },
   {
-   "seq": 21,
+   "seq": 28,
    "workflow_id": "demo_generate-tests",
    "type": "agent_completed",
    "agent": "tester",
-   "t": 6.819,
-   "timestamp": "2026-11-14T13:04:41.676Z",
+   "t": 6.826,
+   "timestamp": "2026-11-15T20:52:17.035Z",
    "data": {
     "outcome": "success",
-    "duration_ms": 4207,
+    "duration_ms": 4208,
     "iteration": 0,
     "summary": "5 tests covering the main path and the max_length error. [5 tests generated, not executed — traced: all cases expected to pass]",
     "output": {
@@ -497,12 +608,12 @@
    }
   },
   {
-   "seq": 22,
+   "seq": 29,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "tester",
-   "t": 6.819,
-   "timestamp": "2026-11-14T13:04:41.676Z",
+   "t": 6.826,
+   "timestamp": "2026-11-15T20:52:17.035Z",
    "data": {
     "sender": "tester",
     "receiver": "orchestrator",
@@ -512,12 +623,42 @@
    }
   },
   {
-   "seq": 23,
+   "seq": 30,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_exited",
+   "agent": "tester",
+   "t": 6.826,
+   "timestamp": "2026-11-15T20:52:17.035Z",
+   "data": {
+    "node": "tester",
+    "step": 4,
+    "updated_keys": [
+     "agent_outputs",
+     "completed_steps",
+     "test_code",
+     "test_results"
+    ]
+   }
+  },
+  {
+   "seq": 31,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 6.828,
+   "timestamp": "2026-11-15T20:52:17.038Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 5
+   }
+  },
+  {
+   "seq": 32,
    "workflow_id": "demo_generate-tests",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 6.821,
-   "timestamp": "2026-11-14T13:04:41.677Z",
+   "t": 6.828,
+   "timestamp": "2026-11-15T20:52:17.038Z",
    "data": {
     "decision": "Hand off to Reviewer",
     "reason": "Tester completed successfully.",
@@ -529,12 +670,12 @@
    }
   },
   {
-   "seq": 24,
+   "seq": 33,
    "workflow_id": "demo_generate-tests",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 6.821,
-   "timestamp": "2026-11-14T13:04:41.677Z",
+   "t": 6.828,
+   "timestamp": "2026-11-15T20:52:17.038Z",
    "data": {
     "calls": 3,
     "input_tokens": 1660,
@@ -544,12 +685,12 @@
    }
   },
   {
-   "seq": 25,
+   "seq": 34,
    "workflow_id": "demo_generate-tests",
    "type": "transition",
    "agent": null,
-   "t": 6.821,
-   "timestamp": "2026-11-14T13:04:41.677Z",
+   "t": 6.828,
+   "timestamp": "2026-11-15T20:52:17.038Z",
    "data": {
     "source": "tester",
     "target": "reviewer",
@@ -558,12 +699,12 @@
    }
   },
   {
-   "seq": 26,
+   "seq": 35,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "orchestrator",
-   "t": 6.821,
-   "timestamp": "2026-11-14T13:04:41.677Z",
+   "t": 6.828,
+   "timestamp": "2026-11-15T20:52:17.038Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "reviewer",
@@ -573,12 +714,12 @@
    }
   },
   {
-   "seq": 27,
+   "seq": 36,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "analyzer",
-   "t": 6.821,
-   "timestamp": "2026-11-14T13:04:41.678Z",
+   "t": 6.828,
+   "timestamp": "2026-11-15T20:52:17.038Z",
    "data": {
     "sender": "analyzer",
     "receiver": "reviewer",
@@ -588,12 +729,12 @@
    }
   },
   {
-   "seq": 28,
+   "seq": 37,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "tester",
-   "t": 6.821,
-   "timestamp": "2026-11-14T13:04:41.678Z",
+   "t": 6.829,
+   "timestamp": "2026-11-15T20:52:17.038Z",
    "data": {
     "sender": "tester",
     "receiver": "reviewer",
@@ -603,12 +744,45 @@
    }
   },
   {
-   "seq": 29,
+   "seq": 38,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 6.829,
+   "timestamp": "2026-11-15T20:52:17.038Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 5,
+    "updated_keys": [
+     "dispatch_id",
+     "iteration_count",
+     "next_agents",
+     "stage_index"
+    ],
+    "routes_to": [
+     "reviewer"
+    ]
+   }
+  },
+  {
+   "seq": 39,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_entered",
+   "agent": "reviewer",
+   "t": 6.831,
+   "timestamp": "2026-11-15T20:52:17.040Z",
+   "data": {
+    "node": "reviewer",
+    "step": 6
+   }
+  },
+  {
+   "seq": 40,
    "workflow_id": "demo_generate-tests",
    "type": "agent_started",
    "agent": "reviewer",
-   "t": 6.823,
-   "timestamp": "2026-11-14T13:04:41.680Z",
+   "t": 6.831,
+   "timestamp": "2026-11-15T20:52:17.041Z",
    "data": {
     "iteration": 0,
     "inputs": {
@@ -619,12 +793,12 @@
    }
   },
   {
-   "seq": 30,
+   "seq": 41,
    "workflow_id": "demo_generate-tests",
    "type": "agent_completed",
    "agent": "reviewer",
-   "t": 9.226,
-   "timestamp": "2026-11-14T13:04:44.083Z",
+   "t": 9.234,
+   "timestamp": "2026-11-15T20:52:19.444Z",
    "data": {
     "outcome": "below_threshold",
     "duration_ms": 2403,
@@ -655,12 +829,12 @@
    }
   },
   {
-   "seq": 31,
+   "seq": 42,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "reviewer",
-   "t": 9.226,
-   "timestamp": "2026-11-14T13:04:44.083Z",
+   "t": 9.234,
+   "timestamp": "2026-11-15T20:52:19.444Z",
    "data": {
     "sender": "reviewer",
     "receiver": "orchestrator",
@@ -670,12 +844,42 @@
    }
   },
   {
-   "seq": 32,
+   "seq": 43,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_exited",
+   "agent": "reviewer",
+   "t": 9.234,
+   "timestamp": "2026-11-15T20:52:19.444Z",
+   "data": {
+    "node": "reviewer",
+    "step": 6,
+    "updated_keys": [
+     "agent_outputs",
+     "best_version",
+     "completed_steps",
+     "review_feedback"
+    ]
+   }
+  },
+  {
+   "seq": 44,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 9.236,
+   "timestamp": "2026-11-15T20:52:19.445Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 7
+   }
+  },
+  {
+   "seq": 45,
    "workflow_id": "demo_generate-tests",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 9.227,
-   "timestamp": "2026-11-14T13:04:44.084Z",
+   "t": 9.236,
+   "timestamp": "2026-11-15T20:52:19.445Z",
    "data": {
     "decision": "Rework requested from Tester",
     "reason": "Quality 7.2/10 is below the bar of 8.0 — weakest: edge cases 5, robustness 7. To do: Add tests for underscores, accents and truncation ending on a hyphen.; Add a symbol-only input case and parametrise invalid max_length values.. Routing back to the Tester (correction 1/3).",
@@ -687,12 +891,12 @@
    }
   },
   {
-   "seq": 33,
+   "seq": 46,
    "workflow_id": "demo_generate-tests",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 9.227,
-   "timestamp": "2026-11-14T13:04:44.084Z",
+   "t": 9.236,
+   "timestamp": "2026-11-15T20:52:19.445Z",
    "data": {
     "calls": 4,
     "input_tokens": 2415,
@@ -702,12 +906,12 @@
    }
   },
   {
-   "seq": 34,
+   "seq": 47,
    "workflow_id": "demo_generate-tests",
    "type": "iteration",
    "agent": "orchestrator",
-   "t": 9.227,
-   "timestamp": "2026-11-14T13:04:44.084Z",
+   "t": 9.236,
+   "timestamp": "2026-11-15T20:52:19.445Z",
    "data": {
     "iteration": 1,
     "max_iterations": 3,
@@ -715,12 +919,12 @@
    }
   },
   {
-   "seq": 35,
+   "seq": 48,
    "workflow_id": "demo_generate-tests",
    "type": "transition",
    "agent": null,
-   "t": 9.227,
-   "timestamp": "2026-11-14T13:04:44.084Z",
+   "t": 9.236,
+   "timestamp": "2026-11-15T20:52:19.445Z",
    "data": {
     "source": "reviewer",
     "target": "tester",
@@ -729,12 +933,12 @@
    }
   },
   {
-   "seq": 36,
+   "seq": 49,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "orchestrator",
-   "t": 9.227,
-   "timestamp": "2026-11-14T13:04:44.084Z",
+   "t": 9.236,
+   "timestamp": "2026-11-15T20:52:19.445Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "tester",
@@ -744,12 +948,12 @@
    }
   },
   {
-   "seq": 37,
+   "seq": 50,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "analyzer",
-   "t": 9.227,
-   "timestamp": "2026-11-14T13:04:44.084Z",
+   "t": 9.236,
+   "timestamp": "2026-11-15T20:52:19.446Z",
    "data": {
     "sender": "analyzer",
     "receiver": "tester",
@@ -759,12 +963,45 @@
    }
   },
   {
-   "seq": 38,
+   "seq": 51,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 9.236,
+   "timestamp": "2026-11-15T20:52:19.446Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 7,
+    "updated_keys": [
+     "dispatch_id",
+     "iteration_count",
+     "next_agents",
+     "stage_index"
+    ],
+    "routes_to": [
+     "tester"
+    ]
+   }
+  },
+  {
+   "seq": 52,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_entered",
+   "agent": "tester",
+   "t": 9.237,
+   "timestamp": "2026-11-15T20:52:19.447Z",
+   "data": {
+    "node": "tester",
+    "step": 8
+   }
+  },
+  {
+   "seq": 53,
    "workflow_id": "demo_generate-tests",
    "type": "agent_started",
    "agent": "tester",
-   "t": 9.23,
-   "timestamp": "2026-11-14T13:04:44.086Z",
+   "t": 9.239,
+   "timestamp": "2026-11-15T20:52:19.448Z",
    "data": {
     "iteration": 1,
     "inputs": {
@@ -776,15 +1013,15 @@
    }
   },
   {
-   "seq": 39,
+   "seq": 54,
    "workflow_id": "demo_generate-tests",
    "type": "agent_completed",
    "agent": "tester",
-   "t": 13.437,
-   "timestamp": "2026-11-14T13:04:48.293Z",
+   "t": 13.452,
+   "timestamp": "2026-11-15T20:52:23.661Z",
    "data": {
     "outcome": "success",
-    "duration_ms": 4207,
+    "duration_ms": 4212,
     "iteration": 1,
     "summary": "11 tests: added the Analyzer's edge cases and parametrised errors. [11 tests generated, not executed — traced: all cases expected to pass]",
     "output": {
@@ -943,12 +1180,12 @@
    }
   },
   {
-   "seq": 40,
+   "seq": 55,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "tester",
-   "t": 13.437,
-   "timestamp": "2026-11-14T13:04:48.294Z",
+   "t": 13.452,
+   "timestamp": "2026-11-15T20:52:23.661Z",
    "data": {
     "sender": "tester",
     "receiver": "orchestrator",
@@ -958,12 +1195,42 @@
    }
   },
   {
-   "seq": 41,
+   "seq": 56,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_exited",
+   "agent": "tester",
+   "t": 13.452,
+   "timestamp": "2026-11-15T20:52:23.661Z",
+   "data": {
+    "node": "tester",
+    "step": 8,
+    "updated_keys": [
+     "agent_outputs",
+     "completed_steps",
+     "test_code",
+     "test_results"
+    ]
+   }
+  },
+  {
+   "seq": 57,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 13.454,
+   "timestamp": "2026-11-15T20:52:23.663Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 9
+   }
+  },
+  {
+   "seq": 58,
    "workflow_id": "demo_generate-tests",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 13.438,
-   "timestamp": "2026-11-14T13:04:48.295Z",
+   "t": 13.454,
+   "timestamp": "2026-11-15T20:52:23.663Z",
    "data": {
     "decision": "Hand off to Reviewer",
     "reason": "Tester completed successfully.",
@@ -975,12 +1242,12 @@
    }
   },
   {
-   "seq": 42,
+   "seq": 59,
    "workflow_id": "demo_generate-tests",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 13.438,
-   "timestamp": "2026-11-14T13:04:48.295Z",
+   "t": 13.454,
+   "timestamp": "2026-11-15T20:52:23.663Z",
    "data": {
     "calls": 6,
     "input_tokens": 3932,
@@ -990,12 +1257,12 @@
    }
   },
   {
-   "seq": 43,
+   "seq": 60,
    "workflow_id": "demo_generate-tests",
    "type": "transition",
    "agent": null,
-   "t": 13.438,
-   "timestamp": "2026-11-14T13:04:48.295Z",
+   "t": 13.454,
+   "timestamp": "2026-11-15T20:52:23.663Z",
    "data": {
     "source": "tester",
     "target": "reviewer",
@@ -1004,12 +1271,12 @@
    }
   },
   {
-   "seq": 44,
+   "seq": 61,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "orchestrator",
-   "t": 13.438,
-   "timestamp": "2026-11-14T13:04:48.295Z",
+   "t": 13.454,
+   "timestamp": "2026-11-15T20:52:23.663Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "reviewer",
@@ -1019,12 +1286,12 @@
    }
   },
   {
-   "seq": 45,
+   "seq": 62,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "analyzer",
-   "t": 13.438,
-   "timestamp": "2026-11-14T13:04:48.295Z",
+   "t": 13.454,
+   "timestamp": "2026-11-15T20:52:23.663Z",
    "data": {
     "sender": "analyzer",
     "receiver": "reviewer",
@@ -1034,12 +1301,12 @@
    }
   },
   {
-   "seq": 46,
+   "seq": 63,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "tester",
-   "t": 13.438,
-   "timestamp": "2026-11-14T13:04:48.295Z",
+   "t": 13.454,
+   "timestamp": "2026-11-15T20:52:23.663Z",
    "data": {
     "sender": "tester",
     "receiver": "reviewer",
@@ -1049,12 +1316,45 @@
    }
   },
   {
-   "seq": 47,
+   "seq": 64,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 13.454,
+   "timestamp": "2026-11-15T20:52:23.663Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 9,
+    "updated_keys": [
+     "dispatch_id",
+     "iteration_count",
+     "next_agents",
+     "stage_index"
+    ],
+    "routes_to": [
+     "reviewer"
+    ]
+   }
+  },
+  {
+   "seq": 65,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_entered",
+   "agent": "reviewer",
+   "t": 13.456,
+   "timestamp": "2026-11-15T20:52:23.665Z",
+   "data": {
+    "node": "reviewer",
+    "step": 10
+   }
+  },
+  {
+   "seq": 66,
    "workflow_id": "demo_generate-tests",
    "type": "agent_started",
    "agent": "reviewer",
-   "t": 13.439,
-   "timestamp": "2026-11-14T13:04:48.296Z",
+   "t": 13.456,
+   "timestamp": "2026-11-15T20:52:23.666Z",
    "data": {
     "iteration": 1,
     "inputs": {
@@ -1066,12 +1366,12 @@
    }
   },
   {
-   "seq": 48,
+   "seq": 67,
    "workflow_id": "demo_generate-tests",
    "type": "agent_completed",
    "agent": "reviewer",
-   "t": 15.843,
-   "timestamp": "2026-11-14T13:04:50.699Z",
+   "t": 15.86,
+   "timestamp": "2026-11-15T20:52:26.069Z",
    "data": {
     "outcome": "approved",
     "duration_ms": 2403,
@@ -1099,12 +1399,12 @@
    }
   },
   {
-   "seq": 49,
+   "seq": 68,
    "workflow_id": "demo_generate-tests",
    "type": "message",
    "agent": "reviewer",
-   "t": 15.843,
-   "timestamp": "2026-11-14T13:04:50.700Z",
+   "t": 15.86,
+   "timestamp": "2026-11-15T20:52:26.069Z",
    "data": {
     "sender": "reviewer",
     "receiver": "orchestrator",
@@ -1114,12 +1414,42 @@
    }
   },
   {
-   "seq": 50,
+   "seq": 69,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_exited",
+   "agent": "reviewer",
+   "t": 15.86,
+   "timestamp": "2026-11-15T20:52:26.069Z",
+   "data": {
+    "node": "reviewer",
+    "step": 10,
+    "updated_keys": [
+     "agent_outputs",
+     "best_version",
+     "completed_steps",
+     "review_feedback"
+    ]
+   }
+  },
+  {
+   "seq": 70,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 15.862,
+   "timestamp": "2026-11-15T20:52:26.071Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 11
+   }
+  },
+  {
+   "seq": 71,
    "workflow_id": "demo_generate-tests",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 15.844,
-   "timestamp": "2026-11-14T13:04:50.701Z",
+   "t": 15.862,
+   "timestamp": "2026-11-15T20:52:26.072Z",
    "data": {
     "decision": "Workflow complete",
     "reason": "Reviewer approved with quality 8.8/10 (bar: 8.0).",
@@ -1129,12 +1459,12 @@
    }
   },
   {
-   "seq": 51,
+   "seq": 72,
    "workflow_id": "demo_generate-tests",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 15.844,
-   "timestamp": "2026-11-14T13:04:50.701Z",
+   "t": 15.862,
+   "timestamp": "2026-11-15T20:52:26.072Z",
    "data": {
     "calls": 7,
     "input_tokens": 4917,
@@ -1144,12 +1474,12 @@
    }
   },
   {
-   "seq": 52,
+   "seq": 73,
    "workflow_id": "demo_generate-tests",
    "type": "transition",
    "agent": null,
-   "t": 15.844,
-   "timestamp": "2026-11-14T13:04:50.701Z",
+   "t": 15.862,
+   "timestamp": "2026-11-15T20:52:26.072Z",
    "data": {
     "source": "reviewer",
     "target": "result",
@@ -1158,12 +1488,33 @@
    }
   },
   {
-   "seq": 53,
+   "seq": 74,
+   "workflow_id": "demo_generate-tests",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 15.862,
+   "timestamp": "2026-11-15T20:52:26.072Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 11,
+    "updated_keys": [
+     "final_result",
+     "iteration_count",
+     "next_agents",
+     "status"
+    ],
+    "routes_to": [
+     "__end__"
+    ]
+   }
+  },
+  {
+   "seq": 75,
    "workflow_id": "demo_generate-tests",
    "type": "workflow_completed",
    "agent": "orchestrator",
-   "t": 15.846,
-   "timestamp": "2026-11-14T13:04:50.702Z",
+   "t": 15.864,
+   "timestamp": "2026-11-15T20:52:26.074Z",
    "data": {
     "final_result": {
      "status": "completed",

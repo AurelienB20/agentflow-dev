@@ -1,13 +1,4 @@
-import {
-  Controls,
-  MarkerType,
-  ReactFlow,
-  ReactFlowProvider,
-  useNodesState,
-  useReactFlow,
-  type Edge,
-  type Node,
-} from '@xyflow/react'
+import { Controls, MarkerType, ReactFlow, ReactFlowProvider, useNodesState, useReactFlow, type Edge, type Node } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { Clock, Gauge, MessageSquareText, Network, Repeat, Zap } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -15,6 +6,7 @@ import type { RunState } from '../hooks/workflowReducer'
 import type { AgentId } from '../types'
 import { AGENT_TAGLINE, agentLabel } from '../data/agents'
 import { AgentNode, ResultNode } from './AgentNode'
+import { LangGraphView } from './LangGraphView'
 import { STATUS_STYLE } from './StatusBadge'
 
 const nodeTypes = { agent: AgentNode, result: ResultNode }
@@ -55,14 +47,24 @@ const KIND_COLOR: Record<string, string> = {
 
 // Plain-language narration of the latest step, so a first-time visitor follows the run without
 // opening the logs.
-function narration(run: RunState): { title: string; detail?: string; now?: string; tone: string } {
+function narration(run: RunState): {
+  title: string
+  detail?: string
+  now?: string
+  tone: string
+} {
   if (run.phase === 'idle')
     return {
       title: 'Press Launch Agents to start.',
       detail: 'The Orchestrator reads the mission, hands each step to the right agent, and sends the work back whenever a check fails.',
       tone: '#e6e9f5',
     }
-  if (run.phase === 'failed') return { title: 'The workflow failed.', detail: run.error ?? undefined, tone: '#f87171' }
+  if (run.phase === 'failed')
+    return {
+      title: 'The workflow failed.',
+      detail: run.error ?? undefined,
+      tone: '#f87171',
+    }
   if (run.phase === 'cancelled') return { title: 'Replay stopped.', tone: '#8b93b0' }
   if (run.phase === 'completed') {
     const r = run.final?.review
@@ -80,9 +82,19 @@ function narration(run: RunState): { title: string; detail?: string; now?: strin
     .filter((id) => id !== 'orchestrator' && run.agents[id].status === 'running')
     .map((id) => `${agentLabel(id)} (${AGENT_TAGLINE[id].toLowerCase()})`)
   const now = working.length ? `Now working: ${working.join(' and ')}.` : undefined
-  if (!last) return { title: 'The Orchestrator is reading the mission…', now, tone: '#818cf8' }
+  if (!last)
+    return {
+      title: 'The Orchestrator is reading the mission…',
+      now,
+      tone: '#818cf8',
+    }
   const tone = last.kind === 'retry' || last.kind === 'rework' ? '#f87171' : last.isDecision ? '#818cf8' : '#e6e9f5'
-  return { title: last.isDecision ? `Orchestrator: ${last.title}` : last.title, detail: last.detail, now, tone }
+  return {
+    title: last.isDecision ? `Orchestrator: ${last.title}` : last.title,
+    detail: last.detail,
+    now,
+    tone,
+  }
 }
 
 function NowBar({ run }: { run: RunState }) {
@@ -101,7 +113,11 @@ function NowBar({ run }: { run: RunState }) {
   )
 }
 
-const TASK_LABEL: Record<string, string> = { BUG_FIX: 'Bug fix', TEST_GEN: 'Test generation', CODE_REVIEW: 'Code review' }
+const TASK_LABEL: Record<string, string> = {
+  BUG_FIX: 'Bug fix',
+  TEST_GEN: 'Test generation',
+  CODE_REVIEW: 'Code review',
+}
 
 function resultLabel(run: RunState): string {
   if (run.phase === 'completed') return run.final?.status === 'completed' ? 'Workflow complete' : 'Stopped at limit'
@@ -117,7 +133,12 @@ function buildGraph(run: RunState, selected: string | null, layout: Layout): { n
     id,
     type: 'agent',
     position: pos[id],
-    data: { agentId: id, runtime: run.agents[id], parallel: run.parallel.includes(id), selected: selected === id },
+    data: {
+      agentId: id,
+      runtime: run.agents[id],
+      parallel: run.parallel.includes(id),
+      selected: selected === id,
+    },
     draggable: false,
   }))
   nodes.push({
@@ -134,7 +155,7 @@ function buildGraph(run: RunState, selected: string | null, layout: Layout): { n
     const live = run.edges[`orchestrator->${id}`]
     const selectedAgent = run.plan?.selected.includes(id)
     const skipped = run.agents[id].status === 'skipped'
-    const color = live ? KIND_COLOR[live.kind] ?? '#818cf8' : '#3b4a7a'
+    const color = live ? (KIND_COLOR[live.kind] ?? '#818cf8') : '#3b4a7a'
     edges.push({
       id: `dispatch-${id}`,
       source: 'orchestrator',
@@ -184,7 +205,11 @@ function buildGraph(run: RunState, selected: string | null, layout: Layout): { n
       labelBgPadding: [6, 3],
       labelBgBorderRadius: 6,
       markerEnd: { type: MarkerType.ArrowClosed, color, width: 16, height: 16 },
-      style: { stroke: color, strokeWidth: e.active ? 2.4 : 1.6, opacity: e.active ? 1 : 0.5 },
+      style: {
+        stroke: color,
+        strokeWidth: e.active ? 2.4 : 1.6,
+        opacity: e.active ? 1 : 0.5,
+      },
       zIndex: e.active ? 10 : 1,
     } as Edge)
   }
@@ -258,6 +283,7 @@ interface Props {
 
 export function WorkflowGraph(props: Props) {
   const { run } = props
+  const [view, setView] = useState<'team' | 'langgraph'>('team')
   const mm = Math.floor(run.elapsed / 60)
   const ss = Math.floor(run.elapsed % 60)
   return (
@@ -265,10 +291,26 @@ export function WorkflowGraph(props: Props) {
       <header className="flex flex-wrap items-center gap-2 border-b border-line px-4 py-3">
         <Network size={16} className="text-primary" aria-hidden />
         <h2 className="text-sm font-semibold">Multi-Agent Workflow</h2>
+        <div className="flex rounded-lg border border-line p-0.5 text-[11px]" role="tablist" aria-label="Graph view">
+          {(
+            [
+              ['team', 'Team view'],
+              ['langgraph', 'LangGraph view'],
+            ] as const
+          ).map(([v, label]) => (
+            <button
+              key={v}
+              role="tab"
+              aria-selected={view === v}
+              onClick={() => setView(v)}
+              className={`rounded-md px-2 py-0.5 transition-colors ${view === v ? 'bg-primary/20 font-semibold text-ink' : 'text-muted hover:text-ink'}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         <div className="ml-auto flex flex-wrap items-center gap-1.5 text-[11px]">
-          {run.taskType && (
-            <span className="rounded-full border border-line px-2 py-0.5 text-muted">{TASK_LABEL[run.taskType]}</span>
-          )}
+          {run.taskType && <span className="rounded-full border border-line px-2 py-0.5 text-muted">{TASK_LABEL[run.taskType]}</span>}
           {run.phase !== 'idle' && (
             <span className="inline-flex items-center gap-1 rounded-full border border-line px-2 py-0.5 font-mono text-muted">
               <Clock size={11} aria-hidden /> {String(mm).padStart(2, '0')}:{String(ss).padStart(2, '0')}
@@ -301,36 +343,42 @@ export function WorkflowGraph(props: Props) {
         </div>
       </header>
       <NowBar run={run} />
-      <div className="relative flex-1">
-        {run.parallel.length > 1 && (
-          <div className="fade-up absolute left-1/2 top-3 z-10 -translate-x-1/2 rounded-full border border-secondary/40 bg-secondary/10 px-3 py-1 text-[11.5px] font-medium text-secondary">
-            <Zap size={12} className="mr-1 inline" aria-hidden />
-            Parallel execution · {run.parallel.map((a) => a[0].toUpperCase() + a.slice(1)).join(' ‖ ')}
-          </div>
-        )}
-        {run.phase === 'idle' && (
-          <div className="pointer-events-none absolute inset-x-0 top-3 z-10 text-center text-[11.5px] text-muted">
-            Click any agent to see what it does
-          </div>
-        )}
-        <ReactFlowProvider>
-          <Graph {...props} />
-        </ReactFlowProvider>
-        <div className="pointer-events-none absolute bottom-3 left-3 hidden flex-wrap gap-x-3 gap-y-1 text-[10.5px] text-muted sm:flex">
-          {(['running', 'completed', 'failed', 'needs_review', 'skipped'] as const).map((s) => (
-            <span key={s} className="inline-flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full" style={{ background: STATUS_STYLE[s].color }} />
-              {STATUS_STYLE[s].label}
-            </span>
-          ))}
-          <span className="inline-flex items-center gap-1">
-            <span className="h-0.5 w-3 bg-danger" /> correction loop
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <span className="h-0.5 w-3 bg-secondary" /> parallel / aggregation
-          </span>
+      {view === 'langgraph' ? (
+        <div className="min-h-0 flex-1">
+          <LangGraphView run={run} />
         </div>
-      </div>
+      ) : (
+        <div className="relative flex-1">
+          {run.parallel.length > 1 && (
+            <div className="fade-up absolute left-1/2 top-3 z-10 -translate-x-1/2 rounded-full border border-secondary/40 bg-secondary/10 px-3 py-1 text-[11.5px] font-medium text-secondary">
+              <Zap size={12} className="mr-1 inline" aria-hidden />
+              Parallel execution · {run.parallel.map((a) => a[0].toUpperCase() + a.slice(1)).join(' ‖ ')}
+            </div>
+          )}
+          {run.phase === 'idle' && (
+            <div className="pointer-events-none absolute inset-x-0 top-3 z-10 text-center text-[11.5px] text-muted">
+              Click any agent to see what it does
+            </div>
+          )}
+          <ReactFlowProvider>
+            <Graph {...props} />
+          </ReactFlowProvider>
+          <div className="pointer-events-none absolute bottom-3 left-3 hidden flex-wrap gap-x-3 gap-y-1 text-[10.5px] text-muted sm:flex">
+            {(['running', 'completed', 'failed', 'needs_review', 'skipped'] as const).map((s) => (
+              <span key={s} className="inline-flex items-center gap-1">
+                <span className="h-2 w-2 rounded-full" style={{ background: STATUS_STYLE[s].color }} />
+                {STATUS_STYLE[s].label}
+              </span>
+            ))}
+            <span className="inline-flex items-center gap-1">
+              <span className="h-0.5 w-3 bg-danger" /> correction loop
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <span className="h-0.5 w-3 bg-secondary" /> parallel / aggregation
+            </span>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

@@ -191,3 +191,29 @@ async def test_tester_missing_trace_is_rejected(run_scenario, script):
     run, _ = await run_scenario("code-review", provider=ScriptedProvider(s))
     assert run.status == "completed"
     assert "No trace for" in events_of(run, "agent_error")[0]["data"]["error"]
+
+
+async def test_node_events_trace_the_langgraph_execution(run_scenario):
+    provider = ScriptedProvider(copy.deepcopy(SCENARIOS["code-review"]["script"]), delay_scale=0.01)
+    run, _ = await run_scenario("code-review", provider=provider)
+    entered = [(e["data"]["node"], e["data"]["step"]) for e in events_of(run, "node_entered")]
+    # START -> orchestrator, then analyzer and tester in ONE super-step, back to the orchestrator...
+    assert entered[0] == ("orchestrator", 1)
+    assert {n for n, s in entered if s == 2} == {"analyzer", "tester"}
+    assert [n for n, s in entered if s == 3] == ["orchestrator"]
+    assert len(entered) == len(events_of(run, "node_exited"))
+    exits = {(e["data"]["node"], e["data"]["step"]): e["data"] for e in events_of(run, "node_exited")}
+    assert sorted(exits[("orchestrator", 1)]["routes_to"]) == ["analyzer", "tester"]
+    last_orchestrator = max(s for n, s in exits if n == "orchestrator")
+    assert exits[("orchestrator", last_orchestrator)]["routes_to"] == ["__end__"]
+    assert "test_code" in exits[("tester", 2)]["updated_keys"]
+
+
+def test_frontend_topology_matches_the_compiled_graph():
+    import json
+
+    from app.config import PROJECT_ROOT
+    from app.orchestration.graph import topology
+
+    path = PROJECT_ROOT / "frontend" / "src" / "data" / "langgraph.json"
+    assert json.loads(path.read_text()) == topology(), "run scripts/record_demos.py to refresh it"

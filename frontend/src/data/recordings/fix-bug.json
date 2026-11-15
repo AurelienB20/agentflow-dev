@@ -14,13 +14,13 @@
   "request": "calculate_average crashes on empty input. Fix it: the function must accept any iterable (lists, tuples, generators) and raise ValueError on empty input."
  },
  "recording": {
-  "recorded_at": "2026-11-14T13:04:34+00:00",
+  "recorded_at": "2026-11-15T20:52:10+00:00",
   "engine": "LangGraph (backend/app/orchestration/graph.py)",
   "provider": "mock",
   "model": "scripted-demo-model",
   "simulated": true,
   "status": "completed",
-  "duration_s": 19.459
+  "duration_s": 19.483
  },
  "events": [
   {
@@ -29,7 +29,7 @@
    "type": "workflow_started",
    "agent": "orchestrator",
    "t": 0.0,
-   "timestamp": "2026-11-14T13:04:15.390Z",
+   "timestamp": "2026-11-15T20:51:50.717Z",
    "data": {
     "mode": "demo-recording",
     "provider": "mock",
@@ -51,21 +51,33 @@
   {
    "seq": 2,
    "workflow_id": "demo_fix-bug",
-   "type": "agent_started",
+   "type": "node_entered",
    "agent": "orchestrator",
-   "t": 0.003,
-   "timestamp": "2026-11-14T13:04:15.393Z",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:51:50.721Z",
    "data": {
-    "phase": "planning"
+    "node": "orchestrator",
+    "step": 1
    }
   },
   {
    "seq": 3,
    "workflow_id": "demo_fix-bug",
+   "type": "agent_started",
+   "agent": "orchestrator",
+   "t": 0.005,
+   "timestamp": "2026-11-15T20:51:50.721Z",
+   "data": {
+    "phase": "planning"
+   }
+  },
+  {
+   "seq": 4,
+   "workflow_id": "demo_fix-bug",
    "type": "tool_result",
    "agent": "tools",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:15.394Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:51:50.722Z",
    "data": {
     "tool": "static_analysis",
     "report": {
@@ -95,12 +107,12 @@
    }
   },
   {
-   "seq": 4,
+   "seq": 5,
    "workflow_id": "demo_fix-bug",
    "type": "task_classified",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:15.394Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:51:50.722Z",
    "data": {
     "task_type": "BUG_FIX",
     "confidence": 1.0,
@@ -108,12 +120,12 @@
    }
   },
   {
-   "seq": 5,
+   "seq": 6,
    "workflow_id": "demo_fix-bug",
    "type": "plan_created",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:15.394Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:51:50.722Z",
    "data": {
     "task_type": "BUG_FIX",
     "stages": [
@@ -147,12 +159,12 @@
    }
   },
   {
-   "seq": 6,
+   "seq": 7,
    "workflow_id": "demo_fix-bug",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:15.394Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:51:50.722Z",
    "data": {
     "decision": "Select Analyzer, Developer, Tester, Reviewer",
     "reason": "A fix needs a diagnosis, a patch, independent validation and a final review.",
@@ -166,12 +178,12 @@
    }
   },
   {
-   "seq": 7,
+   "seq": 8,
    "workflow_id": "demo_fix-bug",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:15.394Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:51:50.722Z",
    "data": {
     "decision": "Start with Analyzer",
     "reason": "The first stage of the plan needs no prior input.",
@@ -182,12 +194,12 @@
    }
   },
   {
-   "seq": 8,
+   "seq": 9,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:15.394Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:51:50.722Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "analyzer",
@@ -197,12 +209,12 @@
    }
   },
   {
-   "seq": 9,
+   "seq": 10,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "tools",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:15.394Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:51:50.722Z",
    "data": {
     "sender": "tools",
     "receiver": "analyzer",
@@ -212,12 +224,12 @@
    }
   },
   {
-   "seq": 10,
+   "seq": 11,
    "workflow_id": "demo_fix-bug",
    "type": "transition",
    "agent": null,
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:15.394Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:51:50.722Z",
    "data": {
     "source": "orchestrator",
     "target": "analyzer",
@@ -226,24 +238,62 @@
    }
   },
   {
-   "seq": 11,
+   "seq": 12,
    "workflow_id": "demo_fix-bug",
    "type": "agent_completed",
    "agent": "orchestrator",
-   "t": 0.004,
-   "timestamp": "2026-11-14T13:04:15.394Z",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:51:50.722Z",
    "data": {
     "phase": "planning",
     "outcome": "success"
    }
   },
   {
-   "seq": 12,
+   "seq": 13,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 0.006,
+   "timestamp": "2026-11-15T20:51:50.722Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 1,
+    "updated_keys": [
+     "dispatch_id",
+     "next_agents",
+     "selected_agents",
+     "stage_index",
+     "stages",
+     "static_checks",
+     "status",
+     "subtasks",
+     "task_type"
+    ],
+    "routes_to": [
+     "analyzer"
+    ]
+   }
+  },
+  {
+   "seq": 14,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "analyzer",
+   "t": 0.012,
+   "timestamp": "2026-11-15T20:51:50.729Z",
+   "data": {
+    "node": "analyzer",
+    "step": 2
+   }
+  },
+  {
+   "seq": 15,
    "workflow_id": "demo_fix-bug",
    "type": "agent_started",
    "agent": "analyzer",
-   "t": 0.006,
-   "timestamp": "2026-11-14T13:04:15.396Z",
+   "t": 0.012,
+   "timestamp": "2026-11-15T20:51:50.729Z",
    "data": {
     "iteration": 0,
     "inputs": {
@@ -256,15 +306,15 @@
    }
   },
   {
-   "seq": 13,
+   "seq": 16,
    "workflow_id": "demo_fix-bug",
    "type": "agent_completed",
    "agent": "analyzer",
-   "t": 2.609,
-   "timestamp": "2026-11-14T13:04:17.999Z",
+   "t": 2.616,
+   "timestamp": "2026-11-15T20:51:53.332Z",
    "data": {
     "outcome": "success",
-    "duration_ms": 2602,
+    "duration_ms": 2603,
     "iteration": 0,
     "summary": "Division by zero on empty input; len() also breaks the 'any iterable' requirement. 3 issue(s) found. Most severe: ZeroDivisionError on empty input (high).",
     "output": {
@@ -298,12 +348,12 @@
    }
   },
   {
-   "seq": 14,
+   "seq": 17,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "analyzer",
-   "t": 2.609,
-   "timestamp": "2026-11-14T13:04:17.999Z",
+   "t": 2.616,
+   "timestamp": "2026-11-15T20:51:53.332Z",
    "data": {
     "sender": "analyzer",
     "receiver": "orchestrator",
@@ -313,12 +363,40 @@
    }
   },
   {
-   "seq": 15,
+   "seq": 18,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "analyzer",
+   "t": 2.616,
+   "timestamp": "2026-11-15T20:51:53.332Z",
+   "data": {
+    "node": "analyzer",
+    "step": 2,
+    "updated_keys": [
+     "agent_outputs",
+     "completed_steps"
+    ]
+   }
+  },
+  {
+   "seq": 19,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 2.618,
+   "timestamp": "2026-11-15T20:51:53.334Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 3
+   }
+  },
+  {
+   "seq": 20,
    "workflow_id": "demo_fix-bug",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 2.61,
-   "timestamp": "2026-11-14T13:04:18.000Z",
+   "t": 2.62,
+   "timestamp": "2026-11-15T20:51:53.336Z",
    "data": {
     "decision": "Hand off to Developer",
     "reason": "Analyzer completed successfully.",
@@ -330,12 +408,12 @@
    }
   },
   {
-   "seq": 16,
+   "seq": 21,
    "workflow_id": "demo_fix-bug",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 2.61,
-   "timestamp": "2026-11-14T13:04:18.000Z",
+   "t": 2.62,
+   "timestamp": "2026-11-15T20:51:53.337Z",
    "data": {
     "calls": 1,
     "input_tokens": 393,
@@ -345,12 +423,12 @@
    }
   },
   {
-   "seq": 17,
+   "seq": 22,
    "workflow_id": "demo_fix-bug",
    "type": "transition",
    "agent": null,
-   "t": 2.61,
-   "timestamp": "2026-11-14T13:04:18.000Z",
+   "t": 2.62,
+   "timestamp": "2026-11-15T20:51:53.337Z",
    "data": {
     "source": "analyzer",
     "target": "developer",
@@ -359,12 +437,12 @@
    }
   },
   {
-   "seq": 18,
+   "seq": 23,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "orchestrator",
-   "t": 2.61,
-   "timestamp": "2026-11-14T13:04:18.000Z",
+   "t": 2.62,
+   "timestamp": "2026-11-15T20:51:53.337Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "developer",
@@ -374,12 +452,12 @@
    }
   },
   {
-   "seq": 19,
+   "seq": 24,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "analyzer",
-   "t": 2.61,
-   "timestamp": "2026-11-14T13:04:18.000Z",
+   "t": 2.62,
+   "timestamp": "2026-11-15T20:51:53.337Z",
    "data": {
     "sender": "analyzer",
     "receiver": "developer",
@@ -389,12 +467,45 @@
    }
   },
   {
-   "seq": 20,
+   "seq": 25,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 2.62,
+   "timestamp": "2026-11-15T20:51:53.337Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 3,
+    "updated_keys": [
+     "dispatch_id",
+     "iteration_count",
+     "next_agents",
+     "stage_index"
+    ],
+    "routes_to": [
+     "developer"
+    ]
+   }
+  },
+  {
+   "seq": 26,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "developer",
+   "t": 2.623,
+   "timestamp": "2026-11-15T20:51:53.339Z",
+   "data": {
+    "node": "developer",
+    "step": 4
+   }
+  },
+  {
+   "seq": 27,
    "workflow_id": "demo_fix-bug",
    "type": "agent_started",
    "agent": "developer",
-   "t": 2.612,
-   "timestamp": "2026-11-14T13:04:18.001Z",
+   "t": 2.623,
+   "timestamp": "2026-11-15T20:51:53.339Z",
    "data": {
     "iteration": 0,
     "inputs": {
@@ -404,15 +515,15 @@
    }
   },
   {
-   "seq": 21,
+   "seq": 28,
    "workflow_id": "demo_fix-bug",
    "type": "agent_completed",
    "agent": "developer",
-   "t": 5.613,
-   "timestamp": "2026-11-14T13:04:21.003Z",
+   "t": 5.629,
+   "timestamp": "2026-11-15T20:51:56.345Z",
    "data": {
     "outcome": "success",
-    "duration_ms": 3001,
+    "duration_ms": 3006,
     "iteration": 0,
     "summary": "Added an explicit empty-input guard that raises ValueError. (1 change(s))",
     "output": {
@@ -425,12 +536,12 @@
    }
   },
   {
-   "seq": 22,
+   "seq": 29,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "developer",
-   "t": 5.614,
-   "timestamp": "2026-11-14T13:04:21.003Z",
+   "t": 5.629,
+   "timestamp": "2026-11-15T20:51:56.345Z",
    "data": {
     "sender": "developer",
     "receiver": "orchestrator",
@@ -440,12 +551,41 @@
    }
   },
   {
-   "seq": 23,
+   "seq": 30,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "developer",
+   "t": 5.629,
+   "timestamp": "2026-11-15T20:51:56.345Z",
+   "data": {
+    "node": "developer",
+    "step": 4,
+    "updated_keys": [
+     "agent_outputs",
+     "completed_steps",
+     "generated_code"
+    ]
+   }
+  },
+  {
+   "seq": 31,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 5.631,
+   "timestamp": "2026-11-15T20:51:56.347Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 5
+   }
+  },
+  {
+   "seq": 32,
    "workflow_id": "demo_fix-bug",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 5.614,
-   "timestamp": "2026-11-14T13:04:21.004Z",
+   "t": 5.631,
+   "timestamp": "2026-11-15T20:51:56.348Z",
    "data": {
     "decision": "Hand off to Tester",
     "reason": "Developer completed successfully.",
@@ -457,12 +597,12 @@
    }
   },
   {
-   "seq": 24,
+   "seq": 33,
    "workflow_id": "demo_fix-bug",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 5.614,
-   "timestamp": "2026-11-14T13:04:21.004Z",
+   "t": 5.631,
+   "timestamp": "2026-11-15T20:51:56.348Z",
    "data": {
     "calls": 2,
     "input_tokens": 848,
@@ -472,12 +612,12 @@
    }
   },
   {
-   "seq": 25,
+   "seq": 34,
    "workflow_id": "demo_fix-bug",
    "type": "transition",
    "agent": null,
-   "t": 5.614,
-   "timestamp": "2026-11-14T13:04:21.004Z",
+   "t": 5.631,
+   "timestamp": "2026-11-15T20:51:56.348Z",
    "data": {
     "source": "developer",
     "target": "tester",
@@ -486,12 +626,12 @@
    }
   },
   {
-   "seq": 26,
+   "seq": 35,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "orchestrator",
-   "t": 5.614,
-   "timestamp": "2026-11-14T13:04:21.004Z",
+   "t": 5.631,
+   "timestamp": "2026-11-15T20:51:56.348Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "tester",
@@ -501,12 +641,12 @@
    }
   },
   {
-   "seq": 27,
+   "seq": 36,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "analyzer",
-   "t": 5.615,
-   "timestamp": "2026-11-14T13:04:21.004Z",
+   "t": 5.631,
+   "timestamp": "2026-11-15T20:51:56.348Z",
    "data": {
     "sender": "analyzer",
     "receiver": "tester",
@@ -516,12 +656,12 @@
    }
   },
   {
-   "seq": 28,
+   "seq": 37,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "developer",
-   "t": 5.615,
-   "timestamp": "2026-11-14T13:04:21.004Z",
+   "t": 5.631,
+   "timestamp": "2026-11-15T20:51:56.348Z",
    "data": {
     "sender": "developer",
     "receiver": "tester",
@@ -531,12 +671,45 @@
    }
   },
   {
-   "seq": 29,
+   "seq": 38,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 5.631,
+   "timestamp": "2026-11-15T20:51:56.348Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 5,
+    "updated_keys": [
+     "dispatch_id",
+     "iteration_count",
+     "next_agents",
+     "stage_index"
+    ],
+    "routes_to": [
+     "tester"
+    ]
+   }
+  },
+  {
+   "seq": 39,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "tester",
+   "t": 5.633,
+   "timestamp": "2026-11-15T20:51:56.350Z",
+   "data": {
+    "node": "tester",
+    "step": 6
+   }
+  },
+  {
+   "seq": 40,
    "workflow_id": "demo_fix-bug",
    "type": "agent_started",
    "agent": "tester",
-   "t": 5.617,
-   "timestamp": "2026-11-14T13:04:21.006Z",
+   "t": 5.635,
+   "timestamp": "2026-11-15T20:51:56.351Z",
    "data": {
     "iteration": 0,
     "inputs": {
@@ -548,15 +721,15 @@
    }
   },
   {
-   "seq": 30,
+   "seq": 41,
    "workflow_id": "demo_fix-bug",
    "type": "agent_completed",
    "agent": "tester",
-   "t": 9.827,
-   "timestamp": "2026-11-14T13:04:25.217Z",
+   "t": 9.847,
+   "timestamp": "2026-11-15T20:52:00.564Z",
    "data": {
     "outcome": "validation_failed",
-    "duration_ms": 4210,
+    "duration_ms": 4212,
     "iteration": 0,
     "summary": "8 cases generated. Static check: generator inputs still fail with this patch. [8 tests generated, not executed — traced: 2 case(s) expected to fail]",
     "output": {
@@ -695,12 +868,12 @@
    }
   },
   {
-   "seq": 31,
+   "seq": 42,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "tester",
-   "t": 9.828,
-   "timestamp": "2026-11-14T13:04:25.217Z",
+   "t": 9.847,
+   "timestamp": "2026-11-15T20:52:00.564Z",
    "data": {
     "sender": "tester",
     "receiver": "orchestrator",
@@ -710,12 +883,42 @@
    }
   },
   {
-   "seq": 32,
+   "seq": 43,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "tester",
+   "t": 9.847,
+   "timestamp": "2026-11-15T20:52:00.564Z",
+   "data": {
+    "node": "tester",
+    "step": 6,
+    "updated_keys": [
+     "agent_outputs",
+     "completed_steps",
+     "test_code",
+     "test_results"
+    ]
+   }
+  },
+  {
+   "seq": 44,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 9.849,
+   "timestamp": "2026-11-15T20:52:00.565Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 7
+   }
+  },
+  {
+   "seq": 45,
    "workflow_id": "demo_fix-bug",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 9.829,
-   "timestamp": "2026-11-14T13:04:25.219Z",
+   "t": 9.849,
+   "timestamp": "2026-11-15T20:52:00.565Z",
    "data": {
     "decision": "Retry correction with Developer",
     "reason": "Static validation failed (test_generator_input, test_empty_generator_raises). Sending the report back to the Developer (correction 1/3).",
@@ -727,12 +930,12 @@
    }
   },
   {
-   "seq": 33,
+   "seq": 46,
    "workflow_id": "demo_fix-bug",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 9.829,
-   "timestamp": "2026-11-14T13:04:25.219Z",
+   "t": 9.849,
+   "timestamp": "2026-11-15T20:52:00.565Z",
    "data": {
     "calls": 4,
     "input_tokens": 2182,
@@ -742,12 +945,12 @@
    }
   },
   {
-   "seq": 34,
+   "seq": 47,
    "workflow_id": "demo_fix-bug",
    "type": "iteration",
    "agent": "orchestrator",
-   "t": 9.829,
-   "timestamp": "2026-11-14T13:04:25.219Z",
+   "t": 9.849,
+   "timestamp": "2026-11-15T20:52:00.565Z",
    "data": {
     "iteration": 1,
     "max_iterations": 3,
@@ -755,12 +958,12 @@
    }
   },
   {
-   "seq": 35,
+   "seq": 48,
    "workflow_id": "demo_fix-bug",
    "type": "transition",
    "agent": null,
-   "t": 9.83,
-   "timestamp": "2026-11-14T13:04:25.219Z",
+   "t": 9.849,
+   "timestamp": "2026-11-15T20:52:00.565Z",
    "data": {
     "source": "tester",
     "target": "developer",
@@ -769,12 +972,12 @@
    }
   },
   {
-   "seq": 36,
+   "seq": 49,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "orchestrator",
-   "t": 9.83,
-   "timestamp": "2026-11-14T13:04:25.219Z",
+   "t": 9.849,
+   "timestamp": "2026-11-15T20:52:00.565Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "developer",
@@ -784,12 +987,12 @@
    }
   },
   {
-   "seq": 37,
+   "seq": 50,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "analyzer",
-   "t": 9.83,
-   "timestamp": "2026-11-14T13:04:25.219Z",
+   "t": 9.849,
+   "timestamp": "2026-11-15T20:52:00.565Z",
    "data": {
     "sender": "analyzer",
     "receiver": "developer",
@@ -799,12 +1002,12 @@
    }
   },
   {
-   "seq": 38,
+   "seq": 51,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "tester",
-   "t": 9.83,
-   "timestamp": "2026-11-14T13:04:25.219Z",
+   "t": 9.849,
+   "timestamp": "2026-11-15T20:52:00.565Z",
    "data": {
     "sender": "tester",
     "receiver": "developer",
@@ -814,12 +1017,45 @@
    }
   },
   {
-   "seq": 39,
+   "seq": 52,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 9.849,
+   "timestamp": "2026-11-15T20:52:00.565Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 7,
+    "updated_keys": [
+     "dispatch_id",
+     "iteration_count",
+     "next_agents",
+     "stage_index"
+    ],
+    "routes_to": [
+     "developer"
+    ]
+   }
+  },
+  {
+   "seq": 53,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "developer",
+   "t": 9.85,
+   "timestamp": "2026-11-15T20:52:00.567Z",
+   "data": {
+    "node": "developer",
+    "step": 8
+   }
+  },
+  {
+   "seq": 54,
    "workflow_id": "demo_fix-bug",
    "type": "agent_started",
    "agent": "developer",
-   "t": 9.831,
-   "timestamp": "2026-11-14T13:04:25.221Z",
+   "t": 9.851,
+   "timestamp": "2026-11-15T20:52:00.567Z",
    "data": {
     "iteration": 1,
     "inputs": {
@@ -836,15 +1072,15 @@
    }
   },
   {
-   "seq": 40,
+   "seq": 55,
    "workflow_id": "demo_fix-bug",
    "type": "agent_completed",
    "agent": "developer",
-   "t": 12.836,
-   "timestamp": "2026-11-14T13:04:28.226Z",
+   "t": 12.855,
+   "timestamp": "2026-11-15T20:52:03.571Z",
    "data": {
     "outcome": "success",
-    "duration_ms": 3005,
+    "duration_ms": 3004,
     "iteration": 1,
     "summary": "Materialise the iterable once, then validate and compute; generators now work. (3 change(s))",
     "output": {
@@ -859,12 +1095,12 @@
    }
   },
   {
-   "seq": 41,
+   "seq": 56,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "developer",
-   "t": 12.836,
-   "timestamp": "2026-11-14T13:04:28.226Z",
+   "t": 12.855,
+   "timestamp": "2026-11-15T20:52:03.572Z",
    "data": {
     "sender": "developer",
     "receiver": "orchestrator",
@@ -874,12 +1110,41 @@
    }
   },
   {
-   "seq": 42,
+   "seq": 57,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "developer",
+   "t": 12.855,
+   "timestamp": "2026-11-15T20:52:03.572Z",
+   "data": {
+    "node": "developer",
+    "step": 8,
+    "updated_keys": [
+     "agent_outputs",
+     "completed_steps",
+     "generated_code"
+    ]
+   }
+  },
+  {
+   "seq": 58,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 12.858,
+   "timestamp": "2026-11-15T20:52:03.574Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 9
+   }
+  },
+  {
+   "seq": 59,
    "workflow_id": "demo_fix-bug",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 12.838,
-   "timestamp": "2026-11-14T13:04:28.228Z",
+   "t": 12.858,
+   "timestamp": "2026-11-15T20:52:03.574Z",
    "data": {
     "decision": "Hand off to Tester",
     "reason": "Developer completed successfully.",
@@ -891,12 +1156,12 @@
    }
   },
   {
-   "seq": 43,
+   "seq": 60,
    "workflow_id": "demo_fix-bug",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 12.838,
-   "timestamp": "2026-11-14T13:04:28.228Z",
+   "t": 12.858,
+   "timestamp": "2026-11-15T20:52:03.574Z",
    "data": {
     "calls": 5,
     "input_tokens": 2824,
@@ -906,12 +1171,12 @@
    }
   },
   {
-   "seq": 44,
+   "seq": 61,
    "workflow_id": "demo_fix-bug",
    "type": "transition",
    "agent": null,
-   "t": 12.838,
-   "timestamp": "2026-11-14T13:04:28.228Z",
+   "t": 12.858,
+   "timestamp": "2026-11-15T20:52:03.574Z",
    "data": {
     "source": "developer",
     "target": "tester",
@@ -920,12 +1185,12 @@
    }
   },
   {
-   "seq": 45,
+   "seq": 62,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "orchestrator",
-   "t": 12.838,
-   "timestamp": "2026-11-14T13:04:28.228Z",
+   "t": 12.858,
+   "timestamp": "2026-11-15T20:52:03.574Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "tester",
@@ -935,12 +1200,12 @@
    }
   },
   {
-   "seq": 46,
+   "seq": 63,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "analyzer",
-   "t": 12.838,
-   "timestamp": "2026-11-14T13:04:28.228Z",
+   "t": 12.858,
+   "timestamp": "2026-11-15T20:52:03.574Z",
    "data": {
     "sender": "analyzer",
     "receiver": "tester",
@@ -950,12 +1215,12 @@
    }
   },
   {
-   "seq": 47,
+   "seq": 64,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "developer",
-   "t": 12.838,
-   "timestamp": "2026-11-14T13:04:28.228Z",
+   "t": 12.858,
+   "timestamp": "2026-11-15T20:52:03.574Z",
    "data": {
     "sender": "developer",
     "receiver": "tester",
@@ -965,12 +1230,45 @@
    }
   },
   {
-   "seq": 48,
+   "seq": 65,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 12.858,
+   "timestamp": "2026-11-15T20:52:03.574Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 9,
+    "updated_keys": [
+     "dispatch_id",
+     "iteration_count",
+     "next_agents",
+     "stage_index"
+    ],
+    "routes_to": [
+     "tester"
+    ]
+   }
+  },
+  {
+   "seq": 66,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "tester",
+   "t": 12.861,
+   "timestamp": "2026-11-15T20:52:03.577Z",
+   "data": {
+    "node": "tester",
+    "step": 10
+   }
+  },
+  {
+   "seq": 67,
    "workflow_id": "demo_fix-bug",
    "type": "agent_started",
    "agent": "tester",
-   "t": 12.84,
-   "timestamp": "2026-11-14T13:04:28.230Z",
+   "t": 12.863,
+   "timestamp": "2026-11-15T20:52:03.580Z",
    "data": {
     "iteration": 1,
     "inputs": {
@@ -982,12 +1280,12 @@
    }
   },
   {
-   "seq": 49,
+   "seq": 68,
    "workflow_id": "demo_fix-bug",
    "type": "agent_completed",
    "agent": "tester",
-   "t": 17.049,
-   "timestamp": "2026-11-14T13:04:32.439Z",
+   "t": 17.072,
+   "timestamp": "2026-11-15T20:52:07.789Z",
    "data": {
     "outcome": "success",
     "duration_ms": 4208,
@@ -1113,12 +1411,12 @@
    }
   },
   {
-   "seq": 50,
+   "seq": 69,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "tester",
-   "t": 17.049,
-   "timestamp": "2026-11-14T13:04:32.439Z",
+   "t": 17.072,
+   "timestamp": "2026-11-15T20:52:07.789Z",
    "data": {
     "sender": "tester",
     "receiver": "orchestrator",
@@ -1128,12 +1426,42 @@
    }
   },
   {
-   "seq": 51,
+   "seq": 70,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "tester",
+   "t": 17.072,
+   "timestamp": "2026-11-15T20:52:07.789Z",
+   "data": {
+    "node": "tester",
+    "step": 10,
+    "updated_keys": [
+     "agent_outputs",
+     "completed_steps",
+     "test_code",
+     "test_results"
+    ]
+   }
+  },
+  {
+   "seq": 71,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 17.074,
+   "timestamp": "2026-11-15T20:52:07.790Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 11
+   }
+  },
+  {
+   "seq": 72,
    "workflow_id": "demo_fix-bug",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 17.05,
-   "timestamp": "2026-11-14T13:04:32.440Z",
+   "t": 17.074,
+   "timestamp": "2026-11-15T20:52:07.790Z",
    "data": {
     "decision": "Hand off to Reviewer",
     "reason": "Tester completed successfully.",
@@ -1145,12 +1473,12 @@
    }
   },
   {
-   "seq": 52,
+   "seq": 73,
    "workflow_id": "demo_fix-bug",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 17.05,
-   "timestamp": "2026-11-14T13:04:32.440Z",
+   "t": 17.074,
+   "timestamp": "2026-11-15T20:52:07.790Z",
    "data": {
     "calls": 7,
     "input_tokens": 4256,
@@ -1160,12 +1488,12 @@
    }
   },
   {
-   "seq": 53,
+   "seq": 74,
    "workflow_id": "demo_fix-bug",
    "type": "transition",
    "agent": null,
-   "t": 17.05,
-   "timestamp": "2026-11-14T13:04:32.440Z",
+   "t": 17.074,
+   "timestamp": "2026-11-15T20:52:07.791Z",
    "data": {
     "source": "tester",
     "target": "reviewer",
@@ -1174,12 +1502,12 @@
    }
   },
   {
-   "seq": 54,
+   "seq": 75,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "orchestrator",
-   "t": 17.05,
-   "timestamp": "2026-11-14T13:04:32.440Z",
+   "t": 17.074,
+   "timestamp": "2026-11-15T20:52:07.791Z",
    "data": {
     "sender": "orchestrator",
     "receiver": "reviewer",
@@ -1189,12 +1517,12 @@
    }
   },
   {
-   "seq": 55,
+   "seq": 76,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "analyzer",
-   "t": 17.05,
-   "timestamp": "2026-11-14T13:04:32.440Z",
+   "t": 17.074,
+   "timestamp": "2026-11-15T20:52:07.791Z",
    "data": {
     "sender": "analyzer",
     "receiver": "reviewer",
@@ -1204,12 +1532,12 @@
    }
   },
   {
-   "seq": 56,
+   "seq": 77,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "developer",
-   "t": 17.05,
-   "timestamp": "2026-11-14T13:04:32.440Z",
+   "t": 17.074,
+   "timestamp": "2026-11-15T20:52:07.791Z",
    "data": {
     "sender": "developer",
     "receiver": "reviewer",
@@ -1219,12 +1547,12 @@
    }
   },
   {
-   "seq": 57,
+   "seq": 78,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "tester",
-   "t": 17.05,
-   "timestamp": "2026-11-14T13:04:32.440Z",
+   "t": 17.074,
+   "timestamp": "2026-11-15T20:52:07.791Z",
    "data": {
     "sender": "tester",
     "receiver": "reviewer",
@@ -1234,12 +1562,45 @@
    }
   },
   {
-   "seq": 58,
+   "seq": 79,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 17.074,
+   "timestamp": "2026-11-15T20:52:07.791Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 11,
+    "updated_keys": [
+     "dispatch_id",
+     "iteration_count",
+     "next_agents",
+     "stage_index"
+    ],
+    "routes_to": [
+     "reviewer"
+    ]
+   }
+  },
+  {
+   "seq": 80,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "reviewer",
+   "t": 17.076,
+   "timestamp": "2026-11-15T20:52:07.792Z",
+   "data": {
+    "node": "reviewer",
+    "step": 12
+   }
+  },
+  {
+   "seq": 81,
    "workflow_id": "demo_fix-bug",
    "type": "agent_started",
    "agent": "reviewer",
-   "t": 17.053,
-   "timestamp": "2026-11-14T13:04:32.443Z",
+   "t": 17.077,
+   "timestamp": "2026-11-15T20:52:07.793Z",
    "data": {
     "iteration": 1,
     "inputs": {
@@ -1251,15 +1612,15 @@
    }
   },
   {
-   "seq": 59,
+   "seq": 82,
    "workflow_id": "demo_fix-bug",
    "type": "agent_completed",
    "agent": "reviewer",
-   "t": 19.456,
-   "timestamp": "2026-11-14T13:04:34.846Z",
+   "t": 19.48,
+   "timestamp": "2026-11-15T20:52:10.196Z",
    "data": {
     "outcome": "approved",
-    "duration_ms": 2403,
+    "duration_ms": 2402,
     "iteration": 1,
     "summary": "APPROVED — quality 9.0/10 (correctness 9, edge cases 9, robustness 9, readability 9). The patch meets every requirement in the request; approved.",
     "output": {
@@ -1285,12 +1646,12 @@
    }
   },
   {
-   "seq": 60,
+   "seq": 83,
    "workflow_id": "demo_fix-bug",
    "type": "message",
    "agent": "reviewer",
-   "t": 19.457,
-   "timestamp": "2026-11-14T13:04:34.846Z",
+   "t": 19.48,
+   "timestamp": "2026-11-15T20:52:10.196Z",
    "data": {
     "sender": "reviewer",
     "receiver": "orchestrator",
@@ -1300,12 +1661,42 @@
    }
   },
   {
-   "seq": 61,
+   "seq": 84,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "reviewer",
+   "t": 19.48,
+   "timestamp": "2026-11-15T20:52:10.197Z",
+   "data": {
+    "node": "reviewer",
+    "step": 12,
+    "updated_keys": [
+     "agent_outputs",
+     "best_version",
+     "completed_steps",
+     "review_feedback"
+    ]
+   }
+  },
+  {
+   "seq": 85,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_entered",
+   "agent": "orchestrator",
+   "t": 19.481,
+   "timestamp": "2026-11-15T20:52:10.198Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 13
+   }
+  },
+  {
+   "seq": 86,
    "workflow_id": "demo_fix-bug",
    "type": "decision",
    "agent": "orchestrator",
-   "t": 19.458,
-   "timestamp": "2026-11-14T13:04:34.848Z",
+   "t": 19.481,
+   "timestamp": "2026-11-15T20:52:10.198Z",
    "data": {
     "decision": "Workflow complete",
     "reason": "Reviewer approved with quality 9.0/10 (bar: 8.0).",
@@ -1315,12 +1706,12 @@
    }
   },
   {
-   "seq": 62,
+   "seq": 87,
    "workflow_id": "demo_fix-bug",
    "type": "usage",
    "agent": "orchestrator",
-   "t": 19.458,
-   "timestamp": "2026-11-14T13:04:34.848Z",
+   "t": 19.481,
+   "timestamp": "2026-11-15T20:52:10.198Z",
    "data": {
     "calls": 8,
     "input_tokens": 5017,
@@ -1330,12 +1721,12 @@
    }
   },
   {
-   "seq": 63,
+   "seq": 88,
    "workflow_id": "demo_fix-bug",
    "type": "transition",
    "agent": null,
-   "t": 19.458,
-   "timestamp": "2026-11-14T13:04:34.848Z",
+   "t": 19.481,
+   "timestamp": "2026-11-15T20:52:10.198Z",
    "data": {
     "source": "reviewer",
     "target": "result",
@@ -1344,12 +1735,33 @@
    }
   },
   {
-   "seq": 64,
+   "seq": 89,
+   "workflow_id": "demo_fix-bug",
+   "type": "node_exited",
+   "agent": "orchestrator",
+   "t": 19.482,
+   "timestamp": "2026-11-15T20:52:10.198Z",
+   "data": {
+    "node": "orchestrator",
+    "step": 13,
+    "updated_keys": [
+     "final_result",
+     "iteration_count",
+     "next_agents",
+     "status"
+    ],
+    "routes_to": [
+     "__end__"
+    ]
+   }
+  },
+  {
+   "seq": 90,
    "workflow_id": "demo_fix-bug",
    "type": "workflow_completed",
    "agent": "orchestrator",
-   "t": 19.459,
-   "timestamp": "2026-11-14T13:04:34.849Z",
+   "t": 19.483,
+   "timestamp": "2026-11-15T20:52:10.199Z",
    "data": {
     "final_result": {
      "status": "completed",

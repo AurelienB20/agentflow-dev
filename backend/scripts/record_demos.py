@@ -60,12 +60,22 @@ async def record(scenario_id: str, live: bool) -> dict:
     }
 
 
+def export_topology() -> None:
+    """Write the compiled graph's topology for the frontend (the Guided Demo has no backend)."""
+    from app.orchestration.graph import topology
+
+    path = PROJECT_ROOT / "frontend" / "src" / "data" / "langgraph.json"
+    path.write_text(json.dumps(topology(), indent=1) + "\n", encoding="utf-8")
+    print(f"topology -> {path.relative_to(PROJECT_ROOT)}")
+
+
 async def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--live", action="store_true", help="use the configured LLM provider")
     args = parser.parse_args()
     for d in OUT_DIRS:
         d.mkdir(parents=True, exist_ok=True)
+    export_topology()
     for scenario_id in SCENARIO_ORDER:
         data = await record(scenario_id, args.live)
         for d in OUT_DIRS:

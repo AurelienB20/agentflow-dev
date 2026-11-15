@@ -74,6 +74,14 @@ async def list_agents() -> list[dict]:
     return [ORCHESTRATOR_INFO, *(spec.public() for spec in AGENTS.values())]
 
 
+@router.get("/graph")
+async def graph_topology() -> dict:
+    """The compiled LangGraph's nodes and edges (the UI's "LangGraph view" draws this)."""
+    from app.orchestration.graph import topology
+
+    return topology()
+
+
 @router.post("/workflows", response_model=WorkflowCreated, status_code=202)
 async def create_workflow(body: WorkflowCreate, request: Request) -> WorkflowCreated:
     s = settings()

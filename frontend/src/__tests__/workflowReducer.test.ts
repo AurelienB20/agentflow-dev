@@ -25,6 +25,21 @@ describe('recorded workflows replayed through the UI reducer', () => {
     expect(s.agents.reviewer.history.map((h) => h.outcome)).toEqual(['below_threshold', 'approved'])
   })
 
+  it('code-review traces every LangGraph super-step', () => {
+    const s = replay('code-review')
+    expect(s.trace.map((v) => `${v.step}:${v.node}`)).toEqual([
+      '1:orchestrator',
+      '2:analyzer',
+      '2:tester',
+      '3:orchestrator',
+      '4:reviewer',
+      '5:orchestrator',
+    ])
+    expect(s.trace.every((v) => !v.running)).toBe(true)
+    expect(s.trace[0].routesTo.sort()).toEqual(['analyzer', 'tester'])
+    expect(s.trace.at(-1)?.routesTo).toEqual(['__end__'])
+  })
+
   it('generate-tests skips the developer', () => {
     const s = replay('generate-tests')
     expect(s.agents.developer.status).toBe('skipped')
