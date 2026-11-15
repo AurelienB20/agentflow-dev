@@ -15,6 +15,8 @@ development tasks. It focuses on what makes a system *multi-agent* rather than a
 | **The real LangGraph, live** | *LangGraph view* toggle: the compiled graph (START, orchestrator, agents, END), the node running now lit, each super-step listed with the state keys it wrote |
 | **Supervision and limits** | iteration cap (3), error retry, timeout, per-workflow LLM budget |
 
+**Live demo: https://agentflow.151-80-152-176.sslip.io** (Guided Demo).
+
 Open the page, pick a mission, press **Launch Agents**. No sign-up, no API key, works on a phone.
 
 ---
