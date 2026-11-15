@@ -10,7 +10,7 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY app ./app
 COPY scripts ./scripts
 
-RUN useradd --create-home agentflow
+RUN useradd --create-home agentflow && mkdir -p data && chown agentflow data
 USER agentflow
 EXPOSE 8000
 # Render/Railway/Fly inject $PORT; default 8000 locally.

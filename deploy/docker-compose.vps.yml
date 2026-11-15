@@ -6,6 +6,9 @@ services:
   backend:
     environment:
       ALLOWED_ORIGINS: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN in .env}
+    volumes:
+      # Result cache (replays of real runs) kept across rebuilds.
+      - agentflow_data:/srv/backend/data
     mem_limit: 768m
     logging: &logging
       driver: json-file
@@ -17,6 +20,9 @@ services:
     networks: [default, edge]
     mem_limit: 128m
     logging: *logging
+
+volumes:
+  agentflow_data:
 
 networks:
   edge:
