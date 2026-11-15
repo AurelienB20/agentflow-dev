@@ -1,0 +1,24 @@
+# Production on a server that already runs Caddy (Universal AI Workspace stack).
+#   docker compose -f docker-compose.yml -f deploy/docker-compose.vps.yml up -d --build
+# No published port (Docker bypasses ufw): Caddy reaches the web container by name over
+# the shared "uaw_edge" network; the API stays on this project's own network.
+services:
+  backend:
+    environment:
+      ALLOWED_ORIGINS: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN in .env}
+    mem_limit: 768m
+    logging: &logging
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  frontend:
+    container_name: agentflow-web
+    ports: !reset []
+    networks: [default, edge]
+    mem_limit: 128m
+    logging: *logging
+
+networks:
+  edge:
+    external: true
+    name: uaw_edge

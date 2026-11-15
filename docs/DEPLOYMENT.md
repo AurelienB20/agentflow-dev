@@ -62,3 +62,16 @@ This writes `demo/scenarios/*.json` and `frontend/src/data/recordings/*.json`. R
 * [ ] One backend instance (in-memory run store and rate limiter).
 * [ ] For a persistent result cache on Render, attach a disk and point `RESULT_CACHE_PATH` to it
       (without a disk the cache is rebuilt after each redeploy, which only costs the first run again).
+
+## Option D: next to Universal AI Workspace on the same server (current demo)
+
+The server's Caddy (from the Universal AI Workspace stack) imports one file per extra site from
+`deploy/sites/*.caddy`. This project only adds its web container to the `uaw_edge` network.
+
+```bash
+cp .env.example .env    # LLM_PROVIDER=none for the Guided Demo only
+echo "PUBLIC_ORIGIN=https://agentflow.151-80-152-176.sslip.io" >> .env
+docker compose -f docker-compose.yml -f deploy/docker-compose.vps.yml up -d --build
+```
+
+No port is published; the API is reachable only through nginx (`/api`) behind Caddy.
