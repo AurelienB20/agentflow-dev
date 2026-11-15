@@ -1,7 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" translate="no">
   <head>
     <meta charset="UTF-8" />
+    <!-- Browser translation rewrites text nodes behind React, which then crashes on the next
+         update (blank page after "Launch Agents"). The UI and the agents speak English. -->
+    <meta name="google" content="notranslate" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0B1020" />
